@@ -1,10 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Spring Boot 常用註解速查表</title>
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            line-height: 1.8;
+            padding: 40px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px 14px;
+            text-align: left;
+        }
+        th {
+            background-color: #e8f0fe;
+            font-weight: bold;
+        }
+        code {
+            background-color: #eef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .section {
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
-$END$
+
+<h1>Spring Boot 常用註解速查表</h1>
+<p>適合後端工程師分階段學習，含 API、資料庫、驗證與安全性應用。</p>
+
+<div class="section">
+    <h2>1. 應用啟動與配置類</h2>
+    <table>
+        <tr><th>註解</th><th>用途</th></tr>
+        <tr><td><code>@SpringBootApplication</code></td><td>啟動主類（含組件掃描、配置、自動設定）</td></tr>
+        <tr><td><code>@Configuration</code></td><td>用來建立設定類別</td></tr>
+        <tr><td><code>@Bean</code></td><td>註冊自定義 Bean</td></tr>
+        <tr><td><code>@Value</code></td><td>從 application.yml/properties 注入變數</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>2. 控制器與 API 路由</h2>
+    <table>
+        <tr><th>註解</th><th>用途</th></tr>
+        <tr><td><code>@RestController</code></td><td>建立 REST API 控制器</td></tr>
+        <tr><td><code>@RequestMapping</code>, <code>@GetMapping</code>, <code>@PostMapping</code> 等</td><td>設定 API 路由</td></tr>
+        <tr><td><code>@RequestParam</code></td><td>讀取 URL 查詢參數</td></tr>
+        <tr><td><code>@PathVariable</code></td><td>讀取 URL 中的路徑變數</td></tr>
+        <tr><td><code>@RequestBody</code></td><td>接收 JSON 格式的 request body</td></tr>
+        <tr><td><code>@ResponseBody</code></td><td>回傳 JSON 結果（內含於 <code>@RestController</code>）</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>3. 服務層與依賴注入</h2>
+    <table>
+        <tr><th>註解</th><th>用途</th></tr>
+        <tr><td><code>@Service</code></td><td>標記服務層類別</td></tr>
+        <tr><td><code>@Autowired</code></td><td>自動注入元件</td></tr>
+        <tr><td><code>@Component</code></td><td>泛用元件標記</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>4. 資料庫與 DAO 層（JPA）</h2>
+    <table>
+        <tr><th>註解</th><th>用途</th></tr>
+        <tr><td><code>@Entity</code></td><td>對應資料表的 Entity 類</td></tr>
+        <tr><td><code>@Table(name="...")</code></td><td>指定資料表名稱</td></tr>
+        <tr><td><code>@Id</code></td><td>主鍵標記</td></tr>
+        <tr><td><code>@GeneratedValue</code></td><td>自動生成主鍵策略</td></tr>
+        <tr><td><code>@Column</code></td><td>欄位對應</td></tr>
+        <tr><td><code>@Repository</code></td><td>標記 DAO 類別</td></tr>
+        <tr><td><code>@Transactional</code></td><td>交易控制，確保資料一致性</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>5. 驗證與例外處理</h2>
+    <table>
+        <tr><th>註解</th><th>用途</th></tr>
+        <tr><td><code>@Valid</code></td><td>啟用參數驗證</td></tr>
+        <tr><td><code>@NotNull</code>, <code>@Size</code>, <code>@Email</code> 等</td><td>常見欄位驗證註解</td></tr>
+        <tr><td><code>@ControllerAdvice</code></td><td>全域例外處理配置</td></tr>
+        <tr><td><code>@ExceptionHandler</code></td><td>自訂例外處理方法</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>6. 安全性與授權</h2>
+    <table>
+        <tr><th>註解</th><th>用途</th></tr>
+        <tr><td><code>@EnableWebSecurity</code></td><td>啟用 Spring Security</td></tr>
+        <tr><td><code>@PreAuthorize("hasRole('ROLE_ADMIN')")</code></td><td>方法級權限驗證</td></tr>
+        <tr><td><code>@Secured("ROLE_USER")</code></td><td>基於角色的存取控制</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>建議學習順序</h2>
+    <table>
+        <tr><th>優先級</th><th>重點註解</th><th>說明</th></tr>
+        <tr><td>⭐ 必學</td><td><code>@SpringBootApplication</code>, <code>@RestController</code>, <code>@GetMapping</code>, <code>@Service</code>, <code>@Autowired</code></td><td>基本 CRUD 與 API 應用</td></tr>
+        <tr><td>👍 進階</td><td><code>@RequestBody</code>, <code>@Valid</code>, <code>@Transactional</code>, <code>@Repository</code></td><td>資料處理與驗證</td></tr>
+        <tr><td>🔐 安全性</td><td><code>@PreAuthorize</code>, <code>@ControllerAdvice</code></td><td>登入驗證與錯誤控制</td></tr>
+    </table>
+</div>
+
 </body>
 </html>
