@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社群連結分享與隱私說明</title>
+    <style>
+        body {
+            font-family: "Noto Sans TC", sans-serif;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: #fafafa;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #0a468b;
+        }
+        code {
+            background: #eee;
+            padding: 3px 5px;
+            border-radius: 4px;
+        }
+        pre {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+        }
+        a{
+            color: #2980b9;
+        }
+        a:visited {
+            color: #2980b9;
+        }
+        nav {
+            text-align: left;
+            background-color: pink;
+        }
+        #social-share a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #social-share a:hover {
+            text-decoration: underline;
+        }
+        #social-share span {
+            margin: 0 5px;
+        }
+        #social-share a#fb-share {
+            color: #4267B2;
+        }
+        #social-share a#line-share {
+            color: #00C300;
+        }
+        #social-share a#twitter-share {
+            color: #1DA1F2;
+        }
+        @media screen and (max-width: 767px) {
+            img{
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="google-translate-box">
+    <div id="google_translate_element"></div>
+    <!-- Google Translate 的自動翻譯功能 -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'zh-TW',  // 頁面原語言
+                includedLanguages: 'en,es,fr,de,it,zh-CN,ja,ko,th,vi,my,id,ms,ar,he,ru,tg,uk,hi,tr,pt,nl,is,fi,sv,no,ro,kk,bo,mn,la,fil,tl,el',  // 支援的翻譯語言（可擴展）
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <p>點擊上方的語言選單以切換語言</p>
+</div>
+<nav>
+    <h2>本專案的其他內容</h2>
+    <a href="index.html" target="_blank">Spring Boot 常用註解速查表</a> |
+    <a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a> |
+    <a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含三種架構示意圖）</a> |
+    <a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a>
+</nav>
+<h1>社群平台連結追蹤與隱私完整解析</h1>
+<p>這份文件整理了我和ChatGPT的整段討論，從我原本的問題開始到完整解釋「為什麼分享連結後會出現 <code>/?後面一大串字串</code>，是否會暴露分享者資訊」。</p>
+
+<div class="section">
+    <h2>🔍 1. 原始問題：分享網址會不會暴露分享者？</h2>
+    <p><strong>我的問題：</strong></p>
+    <p>「透過網址分享連結給他人時，為了避免發現原始貼文的分享者是誰，可以刪除 <code>/?</code> 之後的文字嗎？懂這個跟是不是工程師有關嗎？」</p>
+
+    <p><strong>回答：</strong><br>
+        ✔ 是的，多數情況下刪除 <code>?</code> 後面的參數可以避免平台追蹤分享者的來源。<br>
+        ✔ 但這是一般「網路隱私常識」，不代表知道的人一定是工程師。</p>
+</div>
+
+<div class="section">
+    <h2>🧩 2. Query Parameters 是什麼？</h2>
+    <p><code>?</code> 後面的是查詢參數，用來傳遞額外資訊，例如：</p>
+
+    <pre>https://example.com/article?id=123&utm_source=facebook</pre>
+
+    <p>內容可能包含：</p>
+    <ul>
+        <li>廣告追蹤碼（UTM）</li>
+        <li>社群分析參數</li>
+        <li>分享者的資訊</li>
+        <li>平台安全判斷用資料</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>📌 3. 為什麼 Facebook 會加一長串參數？</h2>
+    <p>因為我處在「已登入」狀態，平台需要：</p>
+
+    <ul>
+        <li>追蹤我來自哪裡（追蹤碼：<code>fbclid</code>）</li>
+        <li>確認我有沒有從可疑來源跳轉</li>
+        <li>判斷分享來源（群組？動態牆？粉專？）</li>
+    </ul>
+
+    <p>因此會看到像：</p>
+
+    <pre>https://外部網站.com/?fbclid=AJ82jsdOAsd...</pre>
+</div>
+
+<div class="section">
+    <h2>📌 4. 為什麼 GitHub Pages 不會有一串參數？</h2>
+    <p>我的 GitHub 靜態網站是：</p>
+    <ul>
+        <li>沒有登入系統</li>
+        <li>沒有追蹤功能</li>
+        <li>沒有廣告/分析系統</li>
+    </ul>
+
+    <p>所以它不會自動加參數，網址會保持：</p>
+
+    <pre>https://我的網站.github.io/page.html</pre>
+</div>
+
+<div class="section">
+    <h2>📊 5. 各平台常見追蹤參數列表</h2>
+
+    <h3>Facebook</h3>
+    <pre>
+fbclid=
+ref=
+__tn__=
+__cft__=
+</pre>
+
+    <h3>Instagram</h3>
+    <pre>
+igshid=
+utm_source=ig
+utm_medium=copy_link
+</pre>
+
+    <h3>LINE</h3>
+    <pre>
+utm_source=line
+utm_campaign=share
+utm_medium=messenger
+</pre>
+
+    <h3>YouTube</h3>
+    <pre>
+pp=
+si=
+feature=
+t=   ← 保留是時間軸
+</pre>
+
+    <p>以上參數全部都可以刪除，不會影響目標網站使用。</p>
+</div>
+
+<div class="section">
+    <h2>⚠ 6. 哪些參數可能會暴露我的身份？（注意）</h2>
+    <ul>
+        <li><strong>推薦碼、會員碼</strong>（如 <code>ref=ABC123</code>）</li>
+        <li><strong>錯誤實作的 Token / Session</strong>（少見但危險）</li>
+        <li><strong>個人分享 ID</strong>（Dcard、Medium 部分功能）</li>
+    </ul>
+    <p>當你遇到上述參數時請記得刪掉它們。</p>
+</div>
+
+<div class="section">
+    <h2>🛡 7. 如何「匿名」分享連結</h2>
+
+    <h3>方法 1：刪掉 <code>?</code> 後方所有參數</h3>
+    <pre>https://example.com/article</pre>
+
+    <h3>方法 2：使用網址淨化工具</h3>
+    <ul>
+        <li>removeutm.com</li>
+        <li>clearer.link</li>
+    </ul>
+
+    <h3>方法 3：使用瀏覽器插件（Redirect Cleaner）</h3>
+
+</div>
+
+<div class="section">
+    <h2>🏁 8. 總結</h2>
+    <p>我的理解完全正確：</p>
+    <ul>
+        <li>Facebook 這類平台會加入追蹤參數，所以網址變長。</li>
+        <li>我的 GitHub 靜態網站沒有登入系統 → 不會加參數。</li>
+        <li>大部分參數只是用來追蹤，不是功能必需。</li>
+        <li>刪掉通常不會影響網站正常運作。</li>
+    </ul>
+
+    <p>我有的不是「工程師技巧」而是「網路敏感度」，這是很重要的能力。</p>
+</div>
+<ul id="messages"></ul>
+<div id="social-share" style="margin-top: 20px;">
+    <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
+    <span> | </span>
+    <a id="line-share" href="#" target="_blank" style="color: #00C300; font-weight: bold;">分享到 Line</a>
+    <span> | </span>
+    <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2; font-weight: bold;">分享到 X</a>
+</div>
+<script>
+    // 自動抓取當前頁面的 URL
+    var currentUrl = window.location.href;
+    // Facebook 分享
+    document.getElementById("fb-share").href =
+        "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+    // Line 分享
+    document.getElementById("line-share").href =
+        "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+    // X (Twitter) 分享
+    document.getElementById("twitter-share").href =
+        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=你的文章標題";
+</script>
+<footer style="text-align: center; background-color: purple; color:yellow; font-size: 50px">
+    作者：<a href="https://www.facebook.com/profile.php?id=100056441813114&locale=zh_TW" target="_blank" style="color:white;">周彥廷</a>
+    <br>創作日期：西元二零二五年十二月三日<br>
+    <img width="324" height="432" src="my_appearance2.jpg" alt="自拍">
+    <br>
+</footer>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v17.0" nonce="yourNonce">
+</script>
+
+<div class="fb-comments"
+     data-href="https://chrischou19990904.github.io/harp_app_introduction"
+     data-width="100%"
+     data-numposts="5">
+</div>
+</body>
+</html>

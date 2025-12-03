@@ -43,6 +43,25 @@
         a:visited {
             color: #2980b9;
         }
+        #social-share a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #social-share a:hover {
+            text-decoration: underline;
+        }
+        #social-share span {
+            margin: 0 5px;
+        }
+        #social-share a#fb-share {
+            color: #4267B2;
+        }
+        #social-share a#line-share {
+            color: #00C300;
+        }
+        #social-share a#twitter-share {
+            color: #1DA1F2;
+        }
         @media screen and (max-width: 767px) {
             img{
                 max-width: 100%;
@@ -68,8 +87,21 @@
 </div>
 <h1>Spring Boot 常用註解速查表</h1>
 <p>適合後端工程師分階段學習，含 API、資料庫、驗證與安全性應用。</p>
-
 <div class="section">
+    <h2>目錄</h2>
+    隨便點選下方其中一個主題便能直接快速跳到該主題的教學區
+    <ol>
+        <li><a href="#section1">應用啟動與配置類</a></li>
+        <li><a href="#section2">控制器與 API 路由</a></li>
+        <li><a href="#section3">服務層與依賴注入</a></li>
+        <li><a href="#section4">資料庫與 DAO 層（JPA）</a></li>
+        <li><a href="#section5">驗證與例外處理</a></li>
+        <li><a href="#section6">安全性與授權</a></li>
+        <li><a href="#learning-order">建議學習順序</a></li>
+        <li><a href="#further_reading">延伸閱讀（本Github Pages專案的其他內容）</a></li>
+    </ol>
+</div>
+<div class="section" id="section1">
     <h2>1. 應用啟動與配置類</h2>
     <table>
         <tr><th>註解</th><th>用途</th></tr>
@@ -80,7 +112,7 @@
     </table>
 </div>
 
-<div class="section">
+<div class="section" id="section2">
     <h2>2. 控制器與 API 路由</h2>
     <table>
         <tr><th>註解</th><th>用途</th></tr>
@@ -93,7 +125,7 @@
     </table>
 </div>
 
-<div class="section">
+<div class="section" id="section3">
     <h2>3. 服務層與依賴注入</h2>
     <table>
         <tr><th>註解</th><th>用途</th></tr>
@@ -103,7 +135,7 @@
     </table>
 </div>
 
-<div class="section">
+<div class="section" id="section4">
     <h2>4. 資料庫與 DAO 層（JPA）</h2>
     <table>
         <tr><th>註解</th><th>用途</th></tr>
@@ -117,7 +149,7 @@
     </table>
 </div>
 
-<div class="section">
+<div class="section" id="section5">
     <h2>5. 驗證與例外處理</h2>
     <table>
         <tr><th>註解</th><th>用途</th></tr>
@@ -128,7 +160,7 @@
     </table>
 </div>
 
-<div class="section">
+<div class="section" id="section6">
     <h2>6. 安全性與授權</h2>
     <table>
         <tr><th>註解</th><th>用途</th></tr>
@@ -138,7 +170,7 @@
     </table>
 </div>
 
-<div class="section">
+<div class="section" id="learning-order">
     <h2>建議學習順序</h2>
     <table>
         <tr><th>優先級</th><th>重點註解</th><th>說明</th></tr>
@@ -147,10 +179,21 @@
         <tr><td>🔐 安全性</td><td><code>@PreAuthorize</code>, <code>@ControllerAdvice</code></td><td>登入驗證與錯誤控制</td></tr>
     </table>
 </div>
-<h2>延伸閱讀：</h2>
+<h2 id="further_reading">延伸閱讀：</h2>
 <ul>
     <li><a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a></li>
+    <li><a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a></li>
+    <li><a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含三種架構示意圖）</a></li>
+    <li><a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a></li>
 </ul>
+<ul id="messages"></ul>
+<div id="social-share" style="margin-top: 20px;">
+    <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
+    <span> | </span>
+    <a id="line-share" href="#" target="_blank" style="color: #00C300; font-weight: bold;">分享到 Line</a>
+    <span> | </span>
+    <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2; font-weight: bold;">分享到 X</a>
+</div>
 <footer style="text-align: center; background-color: purple; color:yellow; font-size: 50px">
     作者：<a href="https://www.facebook.com/profile.php?id=100056441813114&locale=zh_TW" target="_blank" style="color:white;">周彥廷</a>
     <br>創作日期：西元二零二五年八月二十一日<br>
@@ -167,52 +210,18 @@
      data-width="100%"
      data-numposts="5">
 </div>
-
-
 <script>
-    document.getElementById('comment-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const name = document.getElementById('name').value.trim();
-        const message = document.getElementById('message').value.trim();
-        const imageFile = document.getElementById('image').files[0];
-        const videoFile = document.getElementById('video').files[0];
-
-        if (!name || !message) {
-            alert('請填寫名字和留言內容');
-            return;
-        }
-
-        const commentDiv = document.createElement('div');
-        commentDiv.innerHTML = `<p><strong>${name}</strong>: ${message}</p>`;
-
-        const mediaWrapper = document.createElement('div');
-        mediaWrapper.classList.add('media-wrapper');
-
-        if (imageFile) {
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(imageFile);
-            img.alt = '上傳的圖片';
-            mediaWrapper.appendChild(img);
-        }
-
-        if (videoFile) {
-            const video = document.createElement('video');
-            video.src = URL.createObjectURL(videoFile);
-            video.controls = true;
-            mediaWrapper.appendChild(video);
-        }
-
-        // 只有當有圖片或影片時才加 mediaWrapper
-        if (mediaWrapper.children.length > 0) {
-            commentDiv.appendChild(mediaWrapper);
-        }
-
-        document.getElementById('comments').appendChild(commentDiv);
-
-        this.reset();
-    });
+    // 自動抓取當前頁面的 URL
+    var currentUrl = window.location.href;
+    // Facebook 分享
+    document.getElementById("fb-share").href =
+        "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+    // Line 分享
+    document.getElementById("line-share").href =
+        "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+    // X (Twitter) 分享
+    document.getElementById("twitter-share").href =
+        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=你的文章標題";
 </script>
-<ul id="messages"></ul>
 </body>
 </html>
