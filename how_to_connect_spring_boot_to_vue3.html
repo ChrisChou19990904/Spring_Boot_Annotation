@@ -118,12 +118,13 @@
 
     <div class="toc">
         <h2>目錄</h2>
+        隨便點選下方其中一個主題便能快速跳到該主題的教學區
         <ul>
             <li><a href="#step1">1. 在 IntelliJ 建立 Spring Boot 專案</a></li>
             <li><a href="#step2">2. 加入 Maven Dependencies（讓 @ 有效）</a></li>
             <li><a href="#step3">3. Spring Boot 專案資料夾結構與類別用途</a></li>
             <li><a href="#step4">4. 設定 application.properties（Supabase PostgreSQL）</a></li>
-            <li><a href="#step5">5. 撰寫 Entity / Repository / Service / DTO / Controller</a></li>
+            <li><a href="#step5">5. 撰寫 Entity / Repository / Service / Controller / DTO / Config</a></li>
             <li><a href="#step6">6. 啟動 Spring Boot（Application 主程式）</a></li>
             <li><a href="#step7">7. 建立並執行 Vue3 前端專案（WebStorm）</a></li>
             <li><a href="#step8">8. 前端使用 Axios 呼叫後端 API</a></li>
@@ -243,7 +244,7 @@ spring.jpa.show-sql=true
 
     <!-- Section 5 -->
     <div class="card" id="step5">
-        <h2>5. 寫 Entity / Repository / Service / Controller</h2>
+        <h2>5. 寫 Entity / Repository / Service / Controller / DTO / Config</h2>
 
         <h3>Entity</h3>
         <pre>
@@ -293,6 +294,84 @@ public class UserController {
     }
 }
 </pre>
+        <h3>DTO（Data Transfer Object）</h3>
+        <p>DTO 用來定義前後端交換資料的格式，它只包含必要的欄位，並且有助於保護內部實體類別的結構。</p>
+        <pre>
+public class UserDTO {
+    private Long id;
+    private String name;
+
+    // 預設構造方法、getter、setter
+    public UserDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    // 其他getter和setter方法
+}
+    </pre>
+
+        <p>在 Controller 中，將 Entity 轉換為 DTO 進行返回：</p>
+        <pre>
+@RestController
+@RequestMapping("/api/users")
+@CrossOrigin("*")
+public class UserController {
+
+    @Autowired
+    private UserService service;
+
+    @GetMapping
+    public List&lt;UserDTO&gt; getAllUsers() {
+        List&lt;User&gt; users = service.getAll();
+        return users.stream()
+                    .map(user -> new UserDTO(user.getId(), user.getName())) // 將 Entity 轉換為 DTO
+                    .collect(Collectors.toList());
+    }
+}
+    </pre>
+
+        <h3>Config（配置類別）</h3>
+        <p>Config 類別負責設定應用程式的特定配置，例如 CORS 設置、Bean 設置等。</p>
+
+        <h4>1. CORS 設置：</h4>
+        <p>如果前端和後端部署在不同的域名或端口上，需要配置 CORS 來允許跨域請求。</p>
+        <pre>
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**") // 允許所有路徑
+                .allowedOrigins("http://localhost:5173") // 允許來自該源的請求
+                .allowedMethods("GET", "POST", "PUT", "DELETE") // 允許的 HTTP 方法
+                .allowedHeaders("*"); // 允許的標頭
+    }
+}
+    </pre>
+
+        <h4>2. Bean 設置：</h4>
+        <p>可以在 `Config` 類別中自定義一些 Bean，例如 ObjectMapper 設置 JSON 格式化等。</p>
+        <pre>
+@Configuration
+public class BeanConfig {
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+    }
+}
+    </pre>
+
+        <h4>3. 數據庫連接配置：</h4>
+        <p>雖然通常 `application.properties` 已經能滿足大多數的配置需求，但如果需要額外的配置，可以在 `Config` 類別中設置。</p>
+        <pre>
+@Configuration
+@EnableJpaRepositories(basePackages = "com.example.repository")
+public class JpaConfig {
+    // 可在此進行額外的 JPA 配置
+}
+    </pre>
     </div>
 
     <!-- Section 6 -->
