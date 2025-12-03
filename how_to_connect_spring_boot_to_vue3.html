@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot 後端串接 Vue3 前端完整流程教學（含 Supabase PostgreSQL）</title>
+
+    <style>
+        body {
+            font-family: "Noto Sans TC", sans-serif;
+            color: #0f1115;
+            background: #e6e6e6;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+        h1, h2, h3 {
+            color: #5ab4ff;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+        .card {
+            background: #e6e6e6;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            border: 1px solid #2d3138;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        .toc {
+            top: 20px;
+            background: #e6e6e6;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid #2a2e35;
+        }
+        .toc ul { list-style: none; padding-left: 0; }
+        .toc li { margin: 8px 0; }
+        code, pre {
+            background: #e6e6e6;
+            border: 1px solid #272b33;
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            display: block;
+        }
+        a{
+            color: #2980b9;
+        }
+        a:visited {
+            color: #2980b9;
+        }
+        nav {
+            text-align: left;
+            background-color: pink;
+        }
+        #social-share a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #social-share a:hover {
+            text-decoration: underline;
+        }
+        #social-share span {
+            margin: 0 5px;
+        }
+        #social-share a#fb-share {
+            color: #4267B2;
+        }
+        #social-share a#line-share {
+            color: #00C300;
+        }
+        #social-share a#twitter-share {
+            color: #1DA1F2;
+        }
+        @media screen and (max-width: 767px) {
+            img{
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div id="google-translate-box">
+    <div id="google_translate_element"></div>
+    <!-- Google Translate 的自動翻譯功能 -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'zh-TW',  // 頁面原語言
+                includedLanguages: 'en,es,fr,de,it,zh-CN,ja,ko,th,vi,my,id,ms,ar,he,ru,tg,uk,hi,tr,pt,nl,is,fi,sv,no,ro,kk,bo,mn,la,fil,tl,el',  // 支援的翻譯語言（可擴展）
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <p>點擊上方的語言選單以切換語言</p>
+</div>
+<div class="container">
+    <nav>
+        <h2>本專案的其他內容</h2>
+        <a href="index.html" target="_blank">Spring Boot 常用註解速查表</a> |
+        <a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a> |
+        <a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a> |
+        <a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含三種架構示意圖）</a> |
+        <a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a>
+    </nav>
+    <h1>Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</h1>
+    <p>這篇文章會帶各位從 IntelliJ IDEA 建立 Spring Boot 後端，一直到 Vue3 使用 Axios 成功呼叫後端 API。
+        包含防火牆、Supabase 連線、全套步驟與各類別用途解說。</p>
+
+    <hr>
+
+    <div class="toc">
+        <h2>目錄</h2>
+        <ul>
+            <li><a href="#step1">1. 在 IntelliJ 建立 Spring Boot 專案</a></li>
+            <li><a href="#step2">2. 加入 Maven Dependencies（讓 @ 有效）</a></li>
+            <li><a href="#step3">3. Spring Boot 專案資料夾結構與類別用途</a></li>
+            <li><a href="#step4">4. 設定 application.properties（Supabase PostgreSQL）</a></li>
+            <li><a href="#step5">5. 撰寫 Entity / Repository / Service / DTO / Controller</a></li>
+            <li><a href="#step6">6. 啟動 Spring Boot（Application 主程式）</a></li>
+            <li><a href="#step7">7. 建立並執行 Vue3 前端專案（WebStorm）</a></li>
+            <li><a href="#step8">8. 前端使用 Axios 呼叫後端 API</a></li>
+            <li><a href="#step9">9. 網路提醒：避免學校/宿舍防火牆，改用手機熱點</a></li>
+        </ul>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card" id="step1">
+        <h2>1. 在 IntelliJ 建立 Spring Boot 專案</h2>
+
+        <p>步驟如下：</p>
+
+        <ol>
+            <li>打開 IntelliJ IDEA</li>
+            <li>File → New → Project</li>
+            <li>選 Spring Initializr</li>
+            <li>選擇：
+                <ul>
+                    <li>Java 17 or 21</li>
+                    <li>Maven</li>
+                    <li>Packaging: Jar</li>
+                </ul>
+            </li>
+            <li>新增套件（Dependencies）：
+                <ul>
+                    <li>Spring Web</li>
+                    <li>Spring Data JPA</li>
+                    <li>PostgreSQL Driver</li>
+                    <li>Lombok</li>
+                </ul>
+            </li>
+        </ol>
+
+        <p>建立後 IntelliJ 會生成基本專案骨架。</p>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card" id="step2">
+        <h2>2. 加入 Maven Dependencies（讓 @ 生效）</h2>
+
+        <p>一般 Spring Boot 專案的 <code>pom.xml</code> 如：</p>
+
+        <pre>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;org.postgresql&lt;/groupId&gt;
+    &lt;artifactId&gt;postgresql&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+    &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</pre>
+
+        <p>新增完後：</p>
+        <p><strong>右上角 Maven → Reload All Projects</strong></p>
+
+        <p>原本的紅字會變成黃字 → 套件成功載入。</p>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card" id="step3">
+        <h2>3. Spring Boot 資料夾結構與類別用途（超清楚版）</h2>
+
+        <pre>
+src/main/java/
+ ├─ entity/        ← 資料庫對應的類別
+ ├─ repository/    ← 連接資料庫（DAO）
+ ├─ service/       ← 商業邏輯處理
+ ├─ controller/    ← API 入口
+ ├─ dto/           ← 前後端交換資料的格式
+ ├─ config/        ← 設定檔（CORS / Bean / 連線設定）
+ └─ Application.java  ← 主程式入口
+</pre>
+
+        <h3>各層解說</h3>
+
+        <ul>
+            <li><strong>Entity：</strong> 資料表的 Java 版本，會對應 PostgreSQL 的欄位。</li>
+            <li><strong>Repository：</strong> 提供 CRUD 方法，如 findAll(), save()。</li>
+            <li><strong>Service：</strong> 管邏輯，例如驗證、流程控制。</li>
+            <li><strong>DTO：</strong> 要傳給前端的資料模型。</li>
+            <li><strong>Controller：</strong> 定義 API，如 <code>@GetMapping</code>, <code>@PostMapping</code>。</li>
+            <li><strong>Config：</strong> 處理 CORS、Bean 設定等。</li>
+            <li><strong>Application 主程式：</strong> 專案真正啟動時的入口。</li>
+        </ul>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card" id="step4">
+        <h2>4. application.properties：連線 Supabase PostgreSQL</h2>
+
+        <p>在 <code>src/main/resources/</code> 裡建立：</p>
+
+        <pre>
+spring.datasource.url=jdbc:postgresql://YOUR_DB_HOST:5432/postgres
+spring.datasource.username=postgres
+spring.datasource.password=YOUR_SUPABASE_PASSWORD
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+</pre>
+
+        <p>Supabase 會提供 PostgreSQL 連線資訊。</p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card" id="step5">
+        <h2>5. 寫 Entity / Repository / Service / Controller</h2>
+
+        <h3>Entity</h3>
+        <pre>
+@Entity
+@Data
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+}
+</pre>
+
+        <h3>Repository</h3>
+        <pre>
+public interface UserRepository extends JpaRepository&lt;User, Long&gt; {
+}
+</pre>
+
+        <h3>Service</h3>
+        <pre>
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository repo;
+
+    public List&lt;User&gt; getAll() {
+        return repo.findAll();
+    }
+}
+</pre>
+
+        <h3>Controller</h3>
+        <pre>
+@RestController
+@RequestMapping("/api/users")
+@CrossOrigin("*")
+public class UserController {
+
+    @Autowired
+    private UserService service;
+
+    @GetMapping
+    public List&lt;User&gt; getAllUsers() {
+        return service.getAll();
+    }
+}
+</pre>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="card" id="step6">
+        <h2>6. Application 主程式</h2>
+        <pre>
+@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
+</pre>
+
+        <p>執行後端：<strong>按右上角綠色箭頭 RUN</strong></p>
+        <p>Spring Boot 會開啟 server → <code>http://localhost:8080</code></p>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="card" id="step7">
+        <h2>7. 使用 WebStorm 開啟 Vue3 專案</h2>
+
+        <p>建立專案：</p>
+
+        <pre>
+npm init vue@latest
+npm install
+npm install axios
+npm run dev
+</pre>
+
+        <p>前端執行在：<code>http://localhost:5173/</code></p>
+    </div>
+
+    <!-- Section 8 -->
+    <div class="card" id="step8">
+        <h2>8. Vue3 前端串接後端 API</h2>
+
+        <p>在 <code>src/services/api.js</code>：</p>
+
+        <pre>
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "http://localhost:8080/api",
+});
+
+export default api;
+</pre>
+
+        <p>在 Vue 組件中：</p>
+
+        <pre>
+import api from "../services/api.js";
+
+onMounted(async () =&gt; {
+    const res = await api.get("/users");
+    console.log(res.data);
+});
+</pre>
+
+        <p>成功後：前端會印出後端資料。</p>
+    </div>
+
+    <!-- Section 9 -->
+    <div class="card" id="step9">
+        <h2>9. 避免學校或租屋處防火牆</h2>
+
+        <p>許多學校（包括大學宿舍）與租屋處會擋：</p>
+
+        <ul>
+            <li>後端 8080 port</li>
+            <li>跨網域流量</li>
+            <li>LAN 內部 IP（如 192.168.x.x）</li>
+        </ul>
+
+        <p><strong>最簡單解法：</strong>
+            👉 連自己手機的 WiFi 熱點（最乾淨、不會被擋）</p>
+
+        <p>我當初後端連不到，就是這個原因。</p>
+    </div>
+
+</div>
+<ul id="messages"></ul>
+<div id="social-share" style="margin-top: 20px;">
+    <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
+    <span> | </span>
+    <a id="line-share" href="#" target="_blank" style="color: #00C300; font-weight: bold;">分享到 Line</a>
+    <span> | </span>
+    <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2; font-weight: bold;">分享到 X</a>
+</div>
+<footer style="text-align: center; background-color: purple; color:yellow; font-size: 50px">
+    作者：<a href="https://www.facebook.com/profile.php?id=100056441813114&locale=zh_TW" target="_blank" style="color:white;">周彥廷</a>
+    <br>創作日期：西元二零二五年十二月四日<br>
+    <img width="324" height="432" src="my_appearance2.jpg" alt="自拍">
+    <br>
+</footer>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v17.0" nonce="yourNonce">
+</script>
+
+<div class="fb-comments"
+     data-href="https://chrischou19990904.github.io/harp_app_introduction"
+     data-width="100%"
+     data-numposts="5">
+</div>
+<script>
+    // 自動抓取當前頁面的 URL
+    var currentUrl = window.location.href;
+    // Facebook 分享
+    document.getElementById("fb-share").href =
+        "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+    // Line 分享
+    document.getElementById("line-share").href =
+        "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+    // X (Twitter) 分享
+    document.getElementById("twitter-share").href =
+        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=你的文章標題";
+</script>
+</body>
+</html>
