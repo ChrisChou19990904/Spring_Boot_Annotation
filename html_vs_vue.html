@@ -103,12 +103,16 @@
         max-width: 100%;
       }
     }
+    /* 新增的樣式 */
+    .anchor-diff-table td.diff {
+      background-color: #fff0f0; /* 突顯差異的背景色 */
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 <div id="google-translate-box">
   <div id="google_translate_element"></div>
-  <!-- Google Translate 的自動翻譯功能 -->
   <script type="text/javascript">
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
@@ -124,9 +128,9 @@
 <header>
   <nav>
     <h2>本專案的其他內容</h2>
-      <a href="index.html" target="_blank">Spring Boot 常用註解速查表</a> |
-      <a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a> |
-      <a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a>|
+    <a href="index.html" target="_blank">Spring Boot 常用註解速查表</a> |
+    <a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a> |
+    <a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a>|
     <a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a> |
     <a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a>
   </nav>
@@ -164,19 +168,15 @@
 
 <div class="diagram">
   <svg width="600" height="280" xmlns="http://www.w3.org/2000/svg">
-    <!-- index.html -->
     <rect x="20" y="30" width="120" height="60" rx="6" ry="6" fill="#dceeff" stroke="#1e70bf" stroke-width="2"/>
     <text x="80" y="65" text-anchor="middle" font-size="13" fill="#1e70bf">index.html</text>
 
-    <!-- main.js -->
     <rect x="170" y="30" width="120" height="60" rx="6" ry="6" fill="#dceeff" stroke="#1e70bf" stroke-width="2"/>
     <text x="230" y="65" text-anchor="middle" font-size="13" fill="#1e70bf">main.js</text>
 
-    <!-- App.vue -->
     <rect x="320" y="20" width="200" height="80" rx="6" ry="6" fill="#fff7e6" stroke="#ff9900" stroke-width="2"/>
     <text x="420" y="45" text-anchor="middle" font-size="13" fill="#ff9900">App.vue</text>
 
-    <!-- 子組件 -->
     <rect x="340" y="120" width="160" height="40" rx="4" ry="4" fill="#e6ffe6" stroke="#00aa44" stroke-width="1.5"/>
     <text x="420" y="143" text-anchor="middle" font-size="12">Header.vue</text>
 
@@ -186,7 +186,6 @@
     <rect x="340" y="220" width="160" height="40" rx="4" ry="4" fill="#e6ffe6" stroke="#00aa44" stroke-width="1.5"/>
     <text x="420" y="243" text-anchor="middle" font-size="12">Footer.vue</text>
 
-    <!-- arrows -->
     <line x1="140" y1="60" x2="170" y2="60" stroke="#999" stroke-width="1.5" marker-end="url(#arrow)" />
     <line x1="290" y1="60" x2="320" y2="60" stroke="#999" stroke-width="1.5" marker-end="url(#arrow)" />
     <line x1="420" y1="100" x2="420" y2="120" stroke="#999" stroke-width="1.5" marker-end="url(#arrow)" />
@@ -224,14 +223,35 @@
   <p><em>▲ 單檔 Vue 組件 (SFC)：結構、邏輯與樣式集中於同一檔案。</em></p>
 </div>
 
-<h2>四、三種開發模式比較</h2>
+<h2>四、錨點導航的行為差異</h2>
+<p>
+  在單頁應用 (SPA) 架構中，傳統的 <code>&lt;a href="#id"&gt;</code> 行為會被 Vue Router 劫持，用於處理路由，而非簡單的頁面內跳轉。這要求必須使用程式碼（如 <code>scrollIntoView()</code> 或 Vue Router 的 <code>scrollBehavior</code>）來手動處理滾動。
+</p>
+
+<table class="anchor-diff-table">
+  <thead>
+  <tr>
+    <th>功能</th>
+    <th>傳統 HTML 行為</th>
+    <th>Vue SPA 行為 (需解決)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>錨點跳轉</td>
+    <td>使用 <code>&lt;a href="#ID"&gt;</code>，瀏覽器原生支持，自動滾動。</td>
+    <td class="diff"><code>#ID</code> 被 Vue Router 視為路由 Hash；需要透過 Vue 方法 (如 <code>scrollIntoView()</code>) 或 Router 配置手動實現滾動。</td>
+  </tr>
+  </tbody>
+</table>
+<h2>五、三種開發模式比較（已更新錨點導航）</h2>
 
 <table>
   <thead>
   <tr>
     <th>類型</th>
     <th>檔案結構</th>
-    <th>特性</th>
+    <th>錨點導航</th> <th>特性</th>
     <th>適用情境</th>
   </tr>
   </thead>
@@ -239,19 +259,19 @@
   <tr>
     <td>傳統 HTML</td>
     <td>單一檔案</td>
-    <td>靜態、簡單、無狀態綁定</td>
+    <td><strong>原生支持</strong> (<code>href="#ID"</code>)</td> <td>靜態、簡單、無狀態綁定</td>
     <td>靜態頁面、簡單展示</td>
   </tr>
   <tr>
     <td>Vue 標準專案</td>
     <td>多檔案（App.vue + main.js + components）</td>
-    <td>模組化、支援 reactivity、維護性高</td>
+    <td><strong>需程式碼實現</strong> (Router 或 JS)</td> <td>模組化、支援 reactivity、維護性高</td>
     <td>正式開發專案</td>
   </tr>
   <tr>
     <td>單檔 Vue 組件 (SFC)</td>
     <td>單一 .vue 檔</td>
-    <td>簡潔、可展示、支援 Vue 語法</td>
+    <td><strong>需程式碼實現</strong> (JS)</td> <td>簡潔、可展示、支援 Vue 語法</td>
     <td>教學、範例、Demo</td>
   </tr>
   </tbody>
