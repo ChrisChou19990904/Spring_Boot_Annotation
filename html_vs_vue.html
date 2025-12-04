@@ -244,6 +244,30 @@
   </tr>
   </tbody>
 </table>
+<h3>🛠️ Vue 中錨點跳轉的實作範例</h3>
+<p>在 Vue 組件中，需移除 <code>href="#ID"</code>，改用 <code>@click</code> 呼叫方法來驅動滾動。</p>
+<pre><code>
+// 1. 在 Template 中綁定點擊事件
+&lt;span @click="scrollTo('target-id')"&gt;跳轉到目標區塊&lt;/span&gt;
+
+// 2. 在 Script 中定義滾動方法
+&lt;script setup&gt;
+import { nextTick } from 'vue';
+
+const scrollTo = (id) =&gt; {
+  // nextTick 確保 DOM 已經準備好
+  nextTick(() =&gt; {
+    const targetElement = document.getElementById(id);
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: 'smooth', // 啟用平滑滾動
+        block: 'start'
+      });
+    }
+  });
+};
+&lt;/script&gt;
+</code></pre>
 <h2>五、三種開發模式比較（已更新錨點導航）</h2>
 
 <table>
