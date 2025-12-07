@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue3 與純 HTML 在部署與錨點導航上的比較</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.7;
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+        }
+        h1, h2, h3 {
+            margin-top: 1.6em;
+        }
+        code {
+            background: #f2f2f2;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        a{
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #2980b9;
+        }
+        #social-share a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #social-share a:hover {
+            text-decoration: underline;
+        }
+        #social-share span {
+            margin: 0 5px;
+        }
+        #social-share a#fb-share {
+            color: #4267B2;
+        }
+        #social-share a#line-share {
+            color: #00C300;
+        }
+        #social-share a#twitter-share {
+            color: #1DA1F2;
+        }
+        header {
+            background-color: pink;
+            padding: 10px 0;
+        }
+        nav {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<div id="google-translate-box">
+    <div id="google_translate_element"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'zh-TW',  // 頁面原語言
+                includedLanguages: 'en,es,fr,de,it,zh-CN,ja,ko,th,vi,my,id,ms,ar,he,ru,tg,uk,hi,tr,pt,nl,is,fi,sv,no,ro,kk,bo,mn,la,fil,tl,el',  // 支援的翻譯語言（可擴展）
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <p>點擊上方的語言選單以切換語言</p>
+</div>
+<header>
+    <nav>
+        <h2>本專案的其他內容</h2>
+        <a href="index.html" target="_blank">Spring Boot 常用註解速查表</a> |
+        <a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a> |
+        <a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a>|
+        <a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含四種架構示意圖）</a>|
+        <a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a> |
+        <a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a>
+    </nav>
+</header>
+<h1>Vue3 與純 HTML 在部署與錨點導航上的差異</h1>
+<h2>目錄</h2>
+隨便點選下方其中一個主題便能快速跳到該主題的教學區
+<ul>
+    <li><a href="#introduction">前言</a></li>
+    <li><a href="#section1">1. Vue3 的部署與錨點導航較為複雜</a></li>
+    <li><a href="#section2">2. 純 HTML 天然支援錨點導航</a></li>
+    <li><a href="#section3">3. 手機瀏覽時錨點可能會發生偏移</a></li>
+    <li><a href="#section4">4. 實務選擇：文章網站適合 HTML；求職時可使用 Vue3 展現能力</a></li>
+    <li><a href="#section5">5. 結論</a></li>
+</ul>
+<h2 id="introduction">前言</h2>
+<p>
+    在進行網頁開發時，若只是用來撰寫文章或展示資訊，
+    選擇使用 Vue3 或純 HTML 會影響部署難度、錨點導航行為、分享連結體驗以及行動裝置的瀏覽效果。
+    以下是兩者之間完整的技術比較與實務分析。
+</p>
+
+<h2 id="section1">1. Vue3 的部署與錨點導航較為複雜</h2>
+
+<p>
+    Vue3 是單頁式應用（SPA），所有畫面更新都透過 JavaScript 控制，因此在部署與錨點上會比純 HTML 複雜得多：
+</p>
+
+<ul>
+    <li>部署前需要進行打包（build）。</li>
+    <li>Vue Router 會占用 URL 的 <code>#</code>，與 HTML 的錨點語法衝突。</li>
+    <li>使用錨點導航時，網址列不會顯示對應的 <code>#id</code>。</li>
+    <li>分享網址後無法直接跳至指定區塊，使用者都會從頁面頂端開始閱讀。</li>
+    <li>要實現錨點跳轉必須撰寫額外的 JavaScript 或設定 <code>scrollBehavior</code>。</li>
+</ul>
+
+<p>
+    因此在 Vue3 中，想達成與 HTML 相同的「網址帶 #id 即可自動跳轉」需要額外實作。
+</p>
+
+<h2 id="section2">2. 純 HTML 天然支援錨點導航</h2>
+
+<p>
+    純 HTML 的錨點是瀏覽器原生功能，幾乎不需要任何設定即可使用：
+</p>
+
+<ul>
+    <li>使用 <code>&lt;a href="#section"&gt;</code> 就能跳轉。</li>
+    <li>網址列會自動更新成對應的錨點。</li>
+    <li>分享網址後，接收者開啟頁面會直接跳到指定位置。</li>
+</ul>
+
+<p>
+    因此在以閱讀為主的網站中，HTML 提供更直覺、穩定且方便的使用體驗。
+</p>
+
+<h2 id="section3">3. 手機瀏覽時錨點可能會發生偏移</h2>
+
+<p>
+    無論是 HTML 或 Vue3，只要是在行動裝置上，錨點都可能因瀏覽器介面高度或排版行為而發生偏移：
+</p>
+
+<ul>
+    <li>手機瀏覽器上下工具列出現與隱藏造成跳轉位置不一致。</li>
+    <li>固定定位（fixed）的 header 可能遮住錨點位置。</li>
+    <li>不同手機的安全區域（safe area，瀏海區）也會造成偏移。</li>
+</ul>
+
+<p>
+    雖然移除 <code>&lt;meta name="viewport"&gt;</code> 能降低偏移，但這會使 RWD（響應式設計）失效，
+    字體會在小螢幕變得極小，不利閱讀，因此不建議這麼做。
+</p>
+
+<h2 id="section4">4. 實務選擇：文章網站適合 HTML；求職時可使用 Vue3 展現能力</h2>
+
+<p>
+    如果網站目標是提供文章、內容展示、說明文件等資訊型內容，
+    那麼純 HTML 能帶來最佳效能、最佳閱讀體驗與最簡單的部署流程。
+</p>
+
+<p>
+    不過，若這個網站同時是你的求職作品集的一部分，僅用 HTML 可能會讓面試官誤以為：
+</p>
+
+<p><strong>「你只會寫靜態 HTML，不會使用現代前端框架。」</strong></p>
+
+<p>為了避免這種誤解，也為了展示自己具備更完整的前端能⼒，你可以：</p>
+
+<ul>
+    <li>另外使用 Vue3 重寫同樣內容的版本。</li>
+    <li>展示組件化架構（Components）。</li>
+    <li>運用 Composition API。</li>
+    <li>設定 Vue Router 與基本頁面切換。</li>
+    <li>示範打包（build）與部署流程。</li>
+</ul>
+
+<p>
+    雖然 Vue3 的部署較複雜，錨點也需要額外處理，但對於面試官來說，
+    這能清楚展現你不只會寫 HTML，而是了解現代前端開發的工程化流程。
+</p>
+
+<h2 id="section5">5. 結論</h2>
+
+<ul>
+    <li><strong>若目的是閱讀體驗：</strong>純 HTML 是最好的選擇。</li>
+    <li><strong>若目的是求職作品集：</strong>可額外使用 Vue3 製作一份版本以展示技能深度。</li>
+    <li>Vue3 部署較複雜，錨點需額外實作；HTML 簡潔直覺但在手機上也可能出現偏移。</li>
+</ul>
+
+<p>
+    根據網站目標選擇最適合的技術，才能同時兼顧使用者體驗與職涯發展需求。
+</p>
+<ul id="messages"></ul>
+<div id="social-share" style="margin-top: 20px;">
+    <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
+    <span> | </span>
+    <a id="line-share" href="#" target="_blank" style="color: #00C300; font-weight: bold;">分享到 Line</a>
+    <span> | </span>
+    <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2; font-weight: bold;">分享到 X</a>
+</div>
+<script>
+    // 自動抓取當前頁面的 URL
+    var currentUrl = window.location.href;
+    // Facebook 分享
+    document.getElementById("fb-share").href =
+        "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+    // Line 分享
+    document.getElementById("line-share").href =
+        "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+    // X (Twitter) 分享
+    document.getElementById("twitter-share").href =
+        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=你的文章標題";
+</script>
+<footer style="text-align: center; background-color: purple; color:yellow; font-size: 50px">
+    作者：<a href="https://www.facebook.com/profile.php?id=100056441813114&locale=zh_TW" target="_blank" style="color:white;">周彥廷</a>
+    <br>創作日期：西元二零二五年十二月七日<br>
+    <img width="540" height="720" src="my_appearance2.jpg" alt="自拍">
+    <br>
+</footer>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v17.0" nonce="yourNonce">
+</script>
+
+<div class="fb-comments"
+     data-href="https://chrischou19990904.github.io/harp_app_introduction"
+     data-width="100%"
+     data-numposts="5">
+</div>
+</body>
+</html>

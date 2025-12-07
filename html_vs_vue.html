@@ -132,16 +132,28 @@
     <a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a> |
     <a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a>|
     <a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a> |
-    <a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a>
+    <a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a> |
+    <a href="deployment_and_anchor_navigation.html" target="_blank">Vue3 與純 HTML 在部署與錨點導航上的差異</a>
   </nav>
 </header>
 <h1>HTML 與 Vue 的結構差異說明（含四種架構示意圖）</h1>
+<h2>目錄</h2>
+隨便點選下方其中一個主題便能快速跳到該主題的教學區
+<ol>
+  <li><a href="#introduction">前言</a></li>
+  <li><a href="#html-structure">一、HTML：單檔式靜態結構</a></li>
+  <li><a href="#vue-project-structure">二、Vue 專案：組件化、多檔結構</a></li>
+  <li><a href="#sfc-structure">三、單檔 Vue 組件（Single File Component, SFC）</a></li>
+  <li><a href="#anchor-navigation-differences">四、錨點導航的行為差異</a></li>
+  <li><a href="#comparison-table">五、三種開發模式比較（已更新錨點導航）</a></li>
+</ol>
+<h2 id="introduction">前言</h2>
 <p>
   傳統 HTML 是單一靜態檔案，而 Vue 採用「<strong>組件化 (Component-based)</strong>」的動態架構。
   Vue 又可分為兩種主要開發形式：多檔案的標準專案架構，以及單一檔案的 Vue 組件（SFC）。
 </p>
 
-<h2>一、HTML：單檔式靜態結構</h2>
+<h2 id="html-structure">一、HTML：單檔式靜態結構</h2>
 
 <p>傳統 HTML 把所有內容都放在同一個檔案中，簡單但不易維護。</p>
 
@@ -159,7 +171,7 @@
   <p><em>▲ 傳統 HTML：所有內容集中在單一檔案中。</em></p>
 </div>
 
-<h2>二、Vue 專案：組件化、多檔結構</h2>
+<h2 id="vue-project-structure">二、Vue 專案：組件化、多檔結構</h2>
 
 <p>
   Vue 將畫面切成多個「組件 (Component)」，每個組件有自己的
@@ -199,7 +211,7 @@
   <p><em>▲ Vue 標準專案架構：App.vue 為主組件，下方有多個子組件。</em></p>
 </div>
 
-<h2>三、單檔 Vue 組件（Single File Component, SFC）</h2>
+<h2 id="sfc-structure">三、單檔 Vue 組件（Single File Component, SFC）</h2>
 
 <p>
   Vue 也能以「單一檔案」的方式存在，即一個 <code>.vue</code> 檔中同時包含
@@ -223,7 +235,7 @@
   <p><em>▲ 單檔 Vue 組件 (SFC)：結構、邏輯與樣式集中於同一檔案。</em></p>
 </div>
 
-<h2>四、錨點導航的行為差異</h2>
+<h2 id="anchor-navigation-differences">四、錨點導航的行為差異</h2>
 <p>
   在單頁應用 (SPA) 架構中，傳統的 <code>&lt;a href="#id"&gt;</code> 行為會被 Vue Router 劫持，用於處理路由，而非簡單的頁面內跳轉。這要求必須使用程式碼（如 <code>scrollIntoView()</code> 或 Vue Router 的 <code>scrollBehavior</code>）來手動處理滾動。
 </p>
@@ -268,7 +280,7 @@ const scrollTo = (id) =&gt; {
 };
 &lt;/script&gt;
 </code></pre>
-<h2>五、三種開發模式比較（已更新錨點導航）</h2>
+<h2 id="comparison-table">五、三種開發模式比較（已更新錨點導航）</h2>
 
 <table>
   <thead>
