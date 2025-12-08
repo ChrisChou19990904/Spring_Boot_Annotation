@@ -179,23 +179,20 @@
         <pre>
             // vite.config.js
 import { defineConfig } from 'vite'
-import VueDevTools from 'vite-plugin-vue-devtools' // 這裡的 'VueDevTools' 是我們給這個模組取的名稱
+// 這裡定義了模組的名稱為 'VueDevTools'
+import VueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
   plugins: [
-    // 這是 Vite 專案中定義所有外掛的地方
+    // ... 其他外掛 (例如 vue())
 
-    // 如果您有使用 @vitejs/plugin-vue，它會在這裡
-    // vue(),
-
-    // 這是關鍵：配置 vite-plugin-vue-devtools
+    // 這是關鍵配置
+    // 陣列中的函式名必須與上方 import 時所取的名稱 **完全一致** (大小寫敏感)
+    // ✅ 正確：VueDevTools(...)
+    // ❌ 錯誤：vuedevtools(...) 或 Vuetools(...)
     VueDevTools({
-      // 將 enabled 設置為 false，阻止外掛在啟動時自動彈出 DevTools 視窗
-            // 關鍵提醒：陣列中使用的 'VueDevTools' 必須與上方 import 時取的名稱一致 (大小寫敏感)
+      // 確保屬性名稱是 'enabled' (全小寫)，這是另一個大小寫敏感的範例。
       enabled: false,
-      // 您也可以使用 openInBrowser: false 來達到類似效果，
-      // 但 enabled: false 是最徹底的禁用方法
-      // openInBrowser: false
     })
 
     // ... 其他外掛
