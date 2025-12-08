@@ -59,11 +59,6 @@
             padding: 15px;
             border-radius: 5px;
         }
-        code {
-            background-color: #eeeeee;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
         pre {
             background-color: #2c3e50;
             color: #ecf0f1;
@@ -177,18 +172,32 @@
         <h3>✅ 永久解決方案：禁用外掛自動開啟</h3>
         <p>要一勞永逸地解決，必須修改專案根目錄下的 Vite 配置檔案，通常是 <code>vite.config.js</code> 或 <code>vite.config.ts</code>。</p>
         <p>透過將外掛的 <code>enabled</code> 屬性設為 <code>false</code>，即可阻止其自動彈出的行為。完成後需<strong>重新啟動開發伺服器</strong>。</p>
-        <pre><code>// vite.config.js
+        <pre>
+            // vite.config.js
 import { defineConfig } from 'vite'
 import VueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
   plugins: [
-    // ... 其他外掛
+    // 這是 Vite 專案中定義所有外掛的地方
+
+    // 如果您有使用 @vitejs/plugin-vue，它會在這裡
+    // vue(),
+
+    // 這是關鍵：配置 vite-plugin-vue-devtools
     VueDevTools({
-      enabled: false, // 將此設置為 false
+      // 將 enabled 設置為 false，阻止外掛在啟動時自動彈出 DevTools 視窗
+      enabled: false,
+      // 您也可以使用 openInBrowser: false 來達到類似效果，
+      // 但 enabled: false 是最徹底的禁用方法
+      // openInBrowser: false
     })
+
+    // ... 其他外掛
   ],
-})</code></pre>
+  // ... 其他 Vite 配置
+})
+        </pre>
     </div>
 </div>
 
