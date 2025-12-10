@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <title>Spring Boot：Entity、DTO、RequestDTO、ResponseDTO 與資料流教學</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            margin: 40px;
+            line-height: 1.7;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .code {
+            background: #f4f4f4;
+            border-left: 4px solid #3498db;
+            padding: 10px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+        }
+        .section {
+            margin-bottom: 45px;
+        }
+        nav {
+            text-align: left;
+            background-color: pink;
+        }
+        a{
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #2980b9;
+        }
+        #social-share a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #social-share a:hover {
+            text-decoration: underline;
+        }
+        #social-share span {
+            margin: 0 5px;
+        }
+        #social-share a#fb-share {
+            color: #4267B2;
+        }
+        #social-share a#line-share {
+            color: #00C300;
+        }
+        #social-share a#twitter-share {
+            color: #1DA1F2;
+        }
+        @media screen and (max-width: 767px) {
+            img{
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="google-translate-box">
+    <div id="google_translate_element"></div>
+    <!-- Google Translate 的自動翻譯功能 -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'zh-TW',  // 頁面原語言
+                includedLanguages: 'en,es,fr,de,it,zh-CN,ja,ko,th,vi,my,id,ms,ar,he,ru,tg,uk,hi,tr,pt,nl,is,fi,sv,no,ro,kk,bo,mn,la,fil,tl,el',  // 支援的翻譯語言（可擴展）
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <p>點擊上方的語言選單以切換語言</p>
+</div>
+<nav>
+    <h2>本專案的其他內容</h2>
+    <ol>
+        <li><a href="index.html" target="_blank">Spring Boot 常用註解速查表</a></li>
+        <li><a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a></li>
+        <li><a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a></li>
+        <li><a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含四種架構示意圖）</a></li>
+        <li><a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a></li>
+        <li><a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a></li>
+        <li><a href="deployment_and_anchor_navigation.html" target="_blank">Vue3 與純 HTML 在部署與錨點導航上的差異</a></li>
+        <li><a href="Vue_DevTools.html" target="_blank">Vue DevTools 深度解析與開發痛點解決</a></li>
+    </ol>
+</nav>
+<h1>Spring Boot 教學：Entity、DTO、RequestDTO、ResponseDTO 與資料流</h1>
+<p>本文件整理自一段討論，內容包含：</p>
+<ul>
+    <li>Entity 與 DTO 的差異</li>
+    <li>DTO 是否會自動連結 Entity？</li>
+    <li>轉換邏輯應該放在哪裡（Controller？Service？）</li>
+    <li>RequestDTO / ResponseDTO / DTO 的用途區分</li>
+    <li>整體資料流示意圖</li>
+</ul>
+
+<hr>
+
+<div class="section">
+    <h2>1. Entity 與 DTO 的差別</h2>
+
+    <h3>Entity 是什麼？</h3>
+    <p>Entity 是後端用來對應資料庫的物件（例如 JPA/Hibernate）。其欄位通常與資料表一致，並包含關聯設定。</p>
+
+    <h3>DTO 是什麼？</h3>
+    <p>
+        DTO（Data Transfer Object）是傳給前端的資料格式。<br>
+        DTO ≠ Entity，它們是兩個完全獨立的物件。
+    </p>
+
+    <h3>DTO 會自動連接 Entity 嗎？</h3>
+    <p><strong>不會。</strong>Spring Boot / JPA 不會自動將 Entity 與 DTO 做轉換。</p>
+</div>
+
+<hr>
+
+<div class="section">
+    <h2>2. Entity 與 DTO 如何轉換？</h2>
+    <p>必須透過人工或工具進行轉換：</p>
+    <ul>
+        <li>手動 mapping</li>
+        <li>使用 MapStruct（推薦）</li>
+        <li>ModelMapper</li>
+    </ul>
+
+    <div class="code">
+        Mapper 範例（MapStruct）：
+        @Mapper(componentModel = "spring")
+        public interface UserMapper {
+        UserDto toDto(User entity);
+        User toEntity(UserDto dto);
+        }
+    </div>
+</div>
+
+<hr>
+
+<div class="section">
+    <h2>3. 轉換邏輯應該放在哪？Controller？Service？</h2>
+
+    <h3>Controller 的職責</h3>
+    <ul>
+        <li>定義 API</li>
+        <li>接收 RequestDTO</li>
+        <li>回傳 ResponseDTO</li>
+        <li>呼叫 Service</li>
+    </ul>
+
+    <p><strong>Controller 不應負責 DTO ↔ Entity 的轉換。</strong></p>
+
+    <h3>Service 的職責</h3>
+    <ul>
+        <li>處理商業邏輯</li>
+        <li>使用 Repository 存取資料庫</li>
+        <li><strong>負責 DTO ↔ Entity 的轉換</strong></li>
+    </ul>
+
+    <p>
+        因此，如果你的程式碼是由 Service 負責轉換，那是符合業界最佳實踐的。<br>
+        有些 AI 或新手教學會把轉換寫在 Controller，但這不是理想做法。
+    </p>
+</div>
+
+<hr>
+
+<div class="section">
+    <h2>4. RequestDTO、ResponseDTO、DTO：各自用途與區分</h2>
+
+    <h3>RequestDTO（輸入）</h3>
+    <ul>
+        <li>接收前端傳來的資料</li>
+        <li>用於 @Valid 驗證</li>
+        <li>不應包含 ID、createdTime、passwordHash 等後端欄位</li>
+    </ul>
+
+    <div class="code">
+        public class CreateUserRequestDTO {
+        @NotBlank
+        private String username;
+
+        @Email
+        private String email;
+
+        private String password;
+        }
+    </div>
+
+    <h3>ResponseDTO（輸出）</h3>
+    <ul>
+        <li>回傳給前端的資料</li>
+        <li>過濾掉敏感資訊（例如 password）</li>
+        <li>是乾淨、安全的輸出格式</li>
+    </ul>
+
+    <div class="code">
+        public class UserResponseDTO {
+        private Long id;
+        private String username;
+        private String email;
+        private LocalDateTime createdAt;
+        }
+    </div>
+
+    <h3>EntityNameDTO（一般的 DTO）</h3>
+    <p>
+        這類 DTO 用途較彈性，通常用於 Service 層或內部使用，<br>
+        或作為多系統間傳遞資料的格式。
+    </p>
+</div>
+
+<hr>
+
+<div class="section">
+    <h2>5. 完整資料流（最正確版本）</h2>
+
+    <p>以下是標準 Spring Boot 業界資料流：</p>
+
+    <div class="code">
+        [前端 / 後台管理系統]
+        ↓ (送資料)
+        RequestDTO
+        ↓
+        Controller
+        ↓
+        Service
+        (DTO → Entity)
+        ↓
+        Repository
+        ↓
+        Database
+        ↓
+        Repository
+        ↓
+        Service
+        (Entity → ResponseDTO)
+        ↓
+        Controller
+        ↓
+        [前端 / 後台管理系統]
+    </div>
+
+    <p>
+        總結：<br>
+        <strong>前端送 RequestDTO → 後端處理成 Entity → 後端產生 ResponseDTO → 回送給前端。</strong>
+    </p>
+</div>
+
+<hr>
+
+<div class="section">
+    <h2>6. 最後結語</h2>
+    <p>你的後端程式碼架構（Service 做轉換）是正確的。<br>
+        而 HTML 教學文件如果寫成 Controller 做轉換，功能上不會錯，但架構上不佳。<br>
+        本文件已修正為業界最佳實踐，適合放在你的專案教學中。</p>
+</div>
+<ul id="messages"></ul>
+<div id="social-share" style="margin-top: 20px;">
+    <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
+    <span> | </span>
+    <a id="line-share" href="#" target="_blank" style="color: #00C300; font-weight: bold;">分享到 Line</a>
+    <span> | </span>
+    <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2; font-weight: bold;">分享到 X</a>
+</div>
+<footer style="text-align: center; background-color: purple; color:yellow; font-size: 50px">
+    作者：<a href="https://www.facebook.com/profile.php?id=100056441813114&locale=zh_TW" target="_blank" style="color:white;">周彥廷</a>
+    <br>創作日期：西元二零二五年十二月十日<br>
+    <img width="324" height="432" src="my_appearance2.jpg" alt="自拍">
+    <br>
+</footer>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v17.0" nonce="yourNonce">
+</script>
+
+<div class="fb-comments"
+     data-href="https://chrischou19990904.github.io/harp_app_introduction"
+     data-width="100%"
+     data-numposts="5">
+</div>
+<script>
+    // 自動抓取當前頁面的 URL
+    var currentUrl = window.location.href;
+    // Facebook 分享
+    document.getElementById("fb-share").href =
+        "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+    // Line 分享
+    document.getElementById("line-share").href =
+        "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+    // X (Twitter) 分享
+    document.getElementById("twitter-share").href =
+        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=你的文章標題";
+</script>
+</body>
+</html>
