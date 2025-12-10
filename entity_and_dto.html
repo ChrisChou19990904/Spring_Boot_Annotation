@@ -92,7 +92,21 @@
     </ol>
 </nav>
 <h1>Spring Boot 教學：Entity、DTO、RequestDTO、ResponseDTO 與資料流</h1>
-<p>本文件整理自一段討論，內容包含：</p>
+<h2>目錄</h2>
+隨便點選下方其中一個主題便能快速跳到該主題的教學區
+<ul>
+    <li><a href="#introduction">前言</a></li>
+    <li><a href="#section1">1. Entity 與 DTO 的差別</a></li>
+    <li><a href="#section2">2. Entity 與 DTO 如何轉換？</a></li>
+    <li><a href="#section3">3. 轉換邏輯應該放在哪？Controller？Service？</a></li>
+    <li><a href="#section4">4. RequestDTO、ResponseDTO、DTO：各自用途與區分</a></li>
+    <li><a href="#section5">5. 完整資料流（最正確版本）</a></li>
+    <li><a href="#section6">6. 最後結語</a></li>
+</ul>
+<hr>
+<div class="section" id="introduction">
+    <h2>前言</h2>"
+<p>本文件整理自一段我和ChatGPT的討論，內容包含：</p>
 <ul>
     <li>Entity 與 DTO 的差異</li>
     <li>DTO 是否會自動連結 Entity？</li>
@@ -100,10 +114,9 @@
     <li>RequestDTO / ResponseDTO / DTO 的用途區分</li>
     <li>整體資料流示意圖</li>
 </ul>
+</div>
 
-<hr>
-
-<div class="section">
+<div class="section" id="section1">
     <h2>1. Entity 與 DTO 的差別</h2>
 
     <h3>Entity 是什麼？</h3>
@@ -121,7 +134,7 @@
 
 <hr>
 
-<div class="section">
+<div class="section" id="section2">
     <h2>2. Entity 與 DTO 如何轉換？</h2>
     <p>必須透過人工或工具進行轉換：</p>
     <ul>
@@ -142,7 +155,7 @@
 
 <hr>
 
-<div class="section">
+<div class="section" id="section3">
     <h2>3. 轉換邏輯應該放在哪？Controller？Service？</h2>
 
     <h3>Controller 的職責</h3>
@@ -170,7 +183,7 @@
 
 <hr>
 
-<div class="section">
+<div class="section" id="section4">
     <h2>4. RequestDTO、ResponseDTO、DTO：各自用途與區分</h2>
 
     <h3>RequestDTO（輸入）</h3>
@@ -217,7 +230,7 @@
 
 <hr>
 
-<div class="section">
+<div class="section" id="section5">
     <h2>5. 完整資料流（最正確版本）</h2>
 
     <p>以下是標準 Spring Boot 業界資料流：</p>
@@ -254,7 +267,7 @@
 
 <hr>
 
-<div class="section">
+<div class="section" id="section6">
     <h2>6. 最後結語</h2>
     <p>你的後端程式碼架構（Service 做轉換）是正確的。<br>
         而 HTML 教學文件如果寫成 Controller 做轉換，功能上不會錯，但架構上不佳。<br>
