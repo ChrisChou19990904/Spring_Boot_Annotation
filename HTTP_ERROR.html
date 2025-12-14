@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>本地全端開發 HTTP 錯誤說明</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+            "Noto Sans TC", Arial, sans-serif;
+            line-height: 1.7;
+            padding: 24px;
+            background-color: #f9fafb;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #1f2937;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        code, pre {
+            font-family: Consolas, monospace;
+            background: #f3f4f6;
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+        pre {
+            padding: 12px;
+            overflow-x: auto;
+        }
+        .tip {
+            background: #eef2ff;
+            border-left: 4px solid #6366f1;
+            padding: 14px 18px;
+            margin-top: 16px;
+        }
+        .warn {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 14px 18px;
+            margin-top: 16px;
+        }
+        a{
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #2980b9;
+        }
+        nav{
+            background-color: pink;
+        }
+        #social-share a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #social-share a:hover {
+            text-decoration: underline;
+        }
+        #social-share span {
+            margin: 0 5px;
+        }
+        #social-share a#fb-share {
+            color: #4267B2;
+        }
+        #social-share a#line-share {
+            color: #00C300;
+        }
+        #social-share a#twitter-share {
+            color: #1DA1F2;
+        }
+        @media screen and (max-width: 767px) {
+            img{
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="google-translate-box">
+    <div id="google_translate_element"></div>
+    <!-- Google Translate 的自動翻譯功能 -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'zh-TW',  // 頁面原語言
+                includedLanguages: 'en,es,fr,de,it,zh-CN,ja,ko,th,vi,my,id,ms,ar,he,ru,tg,uk,hi,tr,pt,nl,is,fi,sv,no,ro,kk,bo,mn,la,fil,tl,el',  // 支援的翻譯語言（可擴展）
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <p>點擊上方的語言選單以切換語言</p>
+</div>
+<nav>
+    <h2>本專案的其他內容</h2>
+    <ol>
+        <li><a href="index.html" target="_blank">Spring Boot 常用註解速查表</a></li>
+        <li><a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a></li>
+        <li><a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a></li>
+        <li><a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含四種架構示意圖）</a></li>
+        <li><a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a></li>
+        <li><a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a></li>
+        <li><a href="deployment_and_anchor_navigation.html" target="_blank">Vue3 與純 HTML 在部署與錨點導航上的差異</a></li>
+        <li><a href="Vue_DevTools.html" target="_blank">Vue DevTools 深度解析與開發痛點解決</a></li>
+        <li><a href="entity_and_dto.html" target="_blank">Spring Boot 教學：Entity、DTO、RequestDTO、ResponseDTO 與資料流</a></li>
+    </ol>
+</nav>
+<h1>本地全端開發 HTTP 錯誤說明</h1>
+<p>
+    適用技術棧：<strong>Spring Boot + Spring Security + JWT + Vue3</strong><br>
+    使用情境：前後端分離、本地開發（localhost 不同 port）
+</p>
+
+<!-- 基本狀態碼 -->
+<div class="card">
+    <h2>常見 HTTP 狀態碼</h2>
+
+    <h3>400 Bad Request</h3>
+    <p>請求格式錯誤，後端無法解析。</p>
+    <ul>
+        <li>JSON 格式錯誤或缺欄位</li>
+        <li>Content-Type 未設為 application/json</li>
+        <li>@RequestBody 對應失敗</li>
+    </ul>
+    <p><strong>一句話：</strong>你送的資料不對。</p>
+
+    <h3>401 Unauthorized</h3>
+    <p>驗證失敗，伺服器不知道你是誰。</p>
+    <ul>
+        <li>未登入</li>
+        <li>JWT 過期或無效</li>
+    </ul>
+
+    <h3>403 Forbidden</h3>
+    <p>已通過驗證，但沒有權限存取。</p>
+    <ul>
+        <li>角色 / 權限不足</li>
+        <li>JWT scope 不夠</li>
+        <li>IP 或 CORS 被擋</li>
+    </ul>
+    <p><strong>一句話：</strong>我知道你是誰，但你不能。</p>
+
+    <h3>500 Internal Server Error</h3>
+    <p>伺服器內部錯誤。</p>
+    <ul>
+        <li>程式例外</li>
+        <li>資料庫或外部服務錯誤</li>
+    </ul>
+</div>
+
+<!-- 本地開發 403 重點 -->
+<div class="card">
+    <h2>本地開發時 403 的真實原因（高命中率）</h2>
+
+    <h3>1️⃣ 請求根本沒進到 Controller</h3>
+    <p>
+        如果你改了很多 auth / jwt / service 類別都沒效果，
+        <strong>代表請求在 Spring Security Filter 就被擋掉了</strong>。
+    </p>
+
+    <div class="warn">
+        ❌ 問題通常不在 JWT 邏輯<br>
+        ✅ 問題在 Filter / CORS / CSRF / Header
+    </div>
+
+    <h3>2️⃣ Authorization Header 沒送</h3>
+    <pre>
+Authorization: Bearer &lt;jwt-token&gt;
+  </pre>
+    <p>請在 Chrome F12 → Network → Request Headers 確認。</p>
+
+    <h3>3️⃣ CORS 設定錯誤（最常見）</h3>
+    <p>
+        前端：<code>http://localhost:5173</code><br>
+        後端：<code>http://localhost:8080</code><br>
+        → 不同 origin，必須設定 CORS
+    </p>
+
+    <pre>
+@Bean
+public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowedOrigins(List.of("http://localhost:5173"));
+    config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+    config.setAllowedHeaders(List.of("*"));
+    config.setAllowCredentials(true);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+    return source;
+}
+  </pre>
+
+    <h3>4️⃣ OPTIONS 預檢請求被擋</h3>
+    <p>瀏覽器會先送 OPTIONS，如果沒放行就直接 403。</p>
+
+    <pre>
+.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+  </pre>
+
+    <h3>5️⃣ CSRF 沒關</h3>
+    <p>JWT + 前後端分離，通常必須關 CSRF。</p>
+
+    <pre>
+csrf(csrf -> csrf.disable())
+  </pre>
+</div>
+
+<!-- 400 說明 -->
+<div class="card">
+    <h2>本地開發時 400 的常見原因</h2>
+
+    <ul>
+        <li>@RequestBody 但前端沒送 JSON</li>
+        <li>Content-Type 未設 application/json</li>
+        <li>DTO 欄位缺失或型別錯誤</li>
+    </ul>
+
+    <h3>Vue3 正確請求範例</h3>
+    <pre>
+axios.post('/api/login', data, {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+  </pre>
+</div>
+
+<!-- 除錯流程 -->
+<div class="card">
+    <h2>正確除錯順序（請照這個來）</h2>
+    <ol>
+        <li>開啟 Spring Security DEBUG log</li>
+        <li>確認 F12 有送 Authorization Header</li>
+        <li>確認 OPTIONS 沒被擋</li>
+        <li>確認 CORS 設定</li>
+        <li>確認 Controller 是否被 hit</li>
+        <li>最後才檢查 JWT 解析邏輯</li>
+    </ol>
+
+    <div class="tip">
+        <strong>記住一句話：</strong><br>
+        改 JWT 沒用，代表問題在它前面。
+    </div>
+</div>
+<ul id="messages"></ul>
+<div id="social-share" style="margin-top: 20px;">
+    <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
+    <span> | </span>
+    <a id="line-share" href="#" target="_blank" style="color: #00C300; font-weight: bold;">分享到 Line</a>
+    <span> | </span>
+    <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2; font-weight: bold;">分享到 X</a>
+</div>
+<script>
+    // 自動抓取當前頁面的 URL
+    var currentUrl = window.location.href;
+    // Facebook 分享
+    document.getElementById("fb-share").href =
+        "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+    // Line 分享
+    document.getElementById("line-share").href =
+        "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+    // X (Twitter) 分享
+    document.getElementById("twitter-share").href =
+        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=你的文章標題";
+</script>
+<footer style="text-align: center; background-color: purple; color:yellow; font-size: 50px">
+    作者：<a href="https://www.facebook.com/profile.php?id=100056441813114&locale=zh_TW" target="_blank" style="color:white;">周彥廷</a>
+    <br>創作日期：西元二零二五年十二月十四日<br>
+    <img width="324" height="432" src="my_appearance2.jpg" alt="自拍">
+    <br>
+</footer>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v17.0" nonce="yourNonce">
+</script>
+
+<div class="fb-comments"
+     data-href="https://chrischou19990904.github.io/harp_app_introduction"
+     data-width="100%"
+     data-numposts="5">
+</div>
+</body>
+</html>
