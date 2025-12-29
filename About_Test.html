@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>軟體品質與測試規範說明</title>
+  <style>
+    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f4f7f6; }
+    header { background: #2c3e50; color: white; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 30px; }
+    section { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    h2 { color: #2980b9; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+    h3 { color: #2c3e50; margin-top: 20px; }
+    code { background-color: #eee; padding: 2px 5px; border-radius: 4px; font-family: 'Courier New', Courier, monospace; }
+    .highlight { color: #e74c3c; font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    table, th, td { border: 1px solid #ddd; }
+    th, td { padding: 12px; text-align: left; }
+    th { background-color: #f8f9fa; }
+    a{
+      color: #2980b9;
+    }
+    a:visited {
+      color: #2980b9;
+    }
+    .footer { text-align: center; font-size: 0.9em; color: #7f8c8d; margin-top: 40px; }
+  </style>
+</head>
+<body>
+<div id="google-translate-box">
+  <div id="google_translate_element"></div>
+  <!-- Google Translate 的自動翻譯功能 -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'zh-TW',  // 頁面原語言
+        includedLanguages: 'en,es,fr,de,it,zh-CN,ja,ko,th,vi,my,id,ms,ar,he,ru,tg,uk,hi,tr,pt,nl,is,fi,sv,no,ro,kk,bo,mn,la,fil,tl,el',  // 支援的翻譯語言（可擴展）
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <p>點擊上方的語言選單以切換語言</p>
+</div>
+<header>
+  <h1>全端軟體品質保證 (QA) 技術文件</h1>
+  <p><a href="https://foreign-languages-book.vercel.app/" target="_blank">外語書商城</a>專案：單元測試架構、狀態管理與業界實踐規範</p>
+</header>
+<nav>
+  <h2>本專案的其他內容</h2>
+  <ol>
+    <li><a href="index.html" target="_blank">Spring Boot 常用註解速查表</a></li>
+    <li><a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a></li>
+    <li><a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a></li>
+    <li><a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含四種架構示意圖）</a></li>
+    <li><a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a></li>
+    <li><a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a></li>
+    <li><a href="deployment_and_anchor_navigation.html" target="_blank">Vue3 與純 HTML 在部署與錨點導航上的差異</a></li>
+    <li><a href="Vue_DevTools.html" target="_blank">Vue DevTools 深度解析與開發痛點解決</a></li>
+    <li><a href="entity_and_dto.html" target="_blank">Spring Boot 教學：Entity、DTO、RequestDTO、ResponseDTO 與資料流</a></li>
+    <li><a href="HTTP_ERROR.html" target="_blank">本地全端開發 HTTP 錯誤說明</a></li>
+  </ol>
+</nav>
+<section>
+  <h2>一、 專案架構：src/main vs. src/test</h2>
+  <p>本專案嚴格遵循 Maven 與 Vite 的標準目錄規範，確保<strong>開發輔助程式碼</strong>與<strong>運行環境程式碼</strong>物理隔離：</p>
+  <ul>
+    <li><strong>src/main/ (Production)：</strong> 包含業務邏輯、控制器與實體類。這是部署至 Render 平台後唯一執行的部分。</li>
+    <li><strong>src/test/ (Development)：</strong> 存放 JUnit 與 Vitest 測試腳本。</li>
+  </ul>
+  <div class="logic-card">
+    <strong>💡 為什麼 Push 測試程式碼是安全的？</strong>
+    <p>當執行 <code>mvn package</code> 或 <code>npm run build</code> 時，建置工具會自動忽略 <code>test</code> 目錄。測試程式碼不會被打包進最終的執行檔中，因此對生產環境的效能與安全性<strong>零負擔</strong>。</p>
+  </div>
+</section>
+
+<section>
+  <h2>二、 測試重心：為什麼是 Service 與 Controller？</h2>
+  <p>我們根據軟體工程中的「測試投資報酬率 (ROI)」來分配測試資源：</p>
+  <table>
+    <thead>
+    <tr>
+      <th>組件名稱</th>
+      <th>測試權重</th>
+      <th>品質保證目標</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><strong>Service / Store</strong></td>
+      <td><span class="highlight">★★★★★</span></td>
+      <td>驗證核心商業邏輯（如 14 種語言解析、購物車重複檢查、登入狀態持久化）。</td>
+    </tr>
+    <tr>
+      <td><strong>Controller / API JS</strong></td>
+      <td><span class="highlight">★★★★☆</span></td>
+      <td>確保 API 契約（Contract）正確，驗證 HTTP 狀態碼與 JSON 格式符合前後端規範。</td>
+    </tr>
+    <tr>
+      <td>Entity / DTO / Config</td>
+      <td>★☆☆☆☆</td>
+      <td>此類組件多為結構定義，不含運算邏輯，透過編譯器檢查即可確保正確性，不需額外測試。</td>
+    </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>三、 前端狀態管理測試：Pinia Store</h2>
+  <p>針對 Vue 3 的狀態管理，我們針對 <code>AuthStore</code> 與 <code>CartStore</code> 進行了深度邏輯驗證：</p>
+  <h3>1. 身分驗證 (Auth Store)</h3>
+  <p>驗證登入後 <code>userEmail</code> 與 <code>role</code> 的存儲正確性，以及 <code>logout</code> 時本地緩存 (LocalStorage) 是否確實清除，防止隱私洩露。</p>
+
+  <h3>2. 購物車邏輯 (Cart Store)</h3>
+  <p>特別測試了<strong>「重複加入攔截」</strong>功能：當書籍已在購物車時，前端應正確觸發 Alert 並阻止無效的 API 請求。此外，驗證了浮點數價格在加總時的精確度。</p>
+
+  <div class="logic-card" style="background: #eef7ff;">
+    <strong>🔍 架構說明：為何沒有 Book Store？</strong>
+    <p>本專案對「書籍資料」採取按需加載（On-demand Load）策略。書籍列表資料通常是唯讀且高頻變動的，直接透過組件與 <code>BookService</code> 交互能減少內存佔用，確保使用者始終看到最新的庫存狀態，這是基於效能考慮的設計決策。</p>
+  </div>
+</section>
+
+<section>
+  <h2>四、 業界現狀與測試價值</h2>
+  <ul>
+    <li><strong>持續整合 (CI)：</strong> 在業界，測試綠燈是程式碼合併的唯一門票。本專案模擬了此流程，確保每次推送的功能皆具備迴歸測試能力。</li>
+    <li><strong>降低技術債：</strong> 透過測試驅動，我們能在開發階段攔截「無效語言分類」或「ISBN 重複」等錯誤，避免 Bug 進入生產環境造成巨大的修復成本。</li>
+  </ul>
+</section>
+
+<div class="footer">
+  <p>&copy; 2025 外語書商城專案組 - 軟體品質期末報告技術附件</p>
+  <p>技術棧：Spring Boot (JUnit 5, Mockito) | Vue 3 (Vitest, Pinia)</p>
+</div>
+<ul id="messages"></ul>
+<div id="social-share" style="margin-top: 20px;">
+  <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
+  <span> | </span>
+  <a id="line-share" href="#" target="_blank" style="color: #00C300; font-weight: bold;">分享到 Line</a>
+  <span> | </span>
+  <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2; font-weight: bold;">分享到 X</a>
+</div>
+<script>
+  // 自動抓取當前頁面的 URL
+  var currentUrl = window.location.href;
+  // Facebook 分享
+  document.getElementById("fb-share").href =
+          "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+  // Line 分享
+  document.getElementById("line-share").href =
+          "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+  // X (Twitter) 分享
+  document.getElementById("twitter-share").href =
+          "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=你的文章標題";
+</script>
+作者：<a href="https://www.facebook.com/profile.php?id=100056441813114&locale=zh_TW" target="_blank">周彥廷</a>
+<br>創作日期：西元二零二五年十二月二十九日<br>
+<img class="my_appearance" width="540" height="720" src="my_appearance2.jpg" alt="自拍">
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v17.0" nonce="yourNonce">
+</script>
+<div class="fb-comments"
+     data-href="https://chrischou19990904.github.io/harp_app_introduction"
+     data-width="100%"
+     data-numposts="5">
+</div>
+</body>
+</html>
