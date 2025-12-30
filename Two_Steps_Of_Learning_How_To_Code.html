@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <title>學程式的二個階段與輸入工具的角色</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+            "Noto Sans TC", Arial, sans-serif;
+            line-height: 1.8;
+            margin: 40px auto;
+            max-width: 900px;
+            padding: 0 20px;
+            color: #222;
+            background-color: #fafafa;
+        }
+        h1, h2, h3 {
+            color: #1f3a8a;
+        }
+        h1 {
+            border-bottom: 3px solid #1f3a8a;
+            padding-bottom: 10px;
+        }
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+        }
+        pre {
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        ul {
+            margin-left: 20px;
+        }
+        .highlight {
+            background: #e0f2fe;
+            padding: 12px;
+            border-left: 5px solid #0284c7;
+            border-radius: 4px;
+        }
+        footer {
+            margin-top: 60px;
+            font-size: 0.9em;
+            color: #555;
+            text-align: center;
+        }
+        a { color: #2980b9; }
+        a :visited { color: #2980b9; }
+    </style>
+</head>
+
+<body>
+<div id="google-translate-box">
+    <div id="google_translate_element"></div>
+    <!-- Google Translate 的自動翻譯功能 -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'zh-TW',  // 頁面原語言
+                includedLanguages: 'en,es,fr,de,it,zh-CN,ja,ko,th,vi,my,id,ms,ar,he,ru,tg,uk,hi,tr,pt,nl,is,fi,sv,no,ro,kk,bo,mn,la,fil,tl,el',  // 支援的翻譯語言（可擴展）
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <p>點擊上方的語言選單以切換語言</p>
+</div>
+<nav class="toc">
+    <h2>本專案的其他內容</h2>
+    <ol>
+        <li><a href="index.html" target="_blank">Spring Boot 常用註解速查表</a></li>
+        <li><a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a></li>
+        <li><a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a></li>
+        <li><a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含四種架構示意圖）</a></li>
+        <li><a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a></li>
+        <li><a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a></li>
+        <li><a href="deployment_and_anchor_navigation.html" target="_blank">Vue3 與純 HTML 在部署與錨點導航上的差異</a></li>
+        <li><a href="Vue_DevTools.html" target="_blank">Vue DevTools 深度解析與開發痛點解決</a></li>
+        <li><a href="entity_and_dto.html" target="_blank">Spring Boot 教學：Entity、DTO、RequestDTO、ResponseDTO 與資料流</a></li>
+        <li><a href="HTTP_ERROR.html" target="_blank">本地全端開發 HTTP 錯誤說明</a></li>
+        <li><a href="About_Test.html" target="_blank">軟體品質與測試規範說明</a></li>
+        <li><a href="Full_Stack_Architecture_Guide.html" target="_blank">全端部署架構與技術演進全紀錄 - 外語書商城</a></li>
+    </ol>
+</nav>
+<h1>學程式的階段，以及「輸入」在不同階段的價值</h1>
+
+<section>
+    <h2>前言</h2>
+    <p>
+        初學程式時，常會接觸到像 <code>input()</code>（Python）、
+        <code>Scanner</code> / <code>next()</code>（Java）這類
+        「只能在本地輸入資料」的工具。
+    </p>
+    <p>
+        當開始真正開發前後端系統後，這些工具幾乎不再出現，
+        於是自然會產生疑問：
+    </p>
+    <div class="highlight">
+        <strong>既然實務系統不太用它們，那它們存在的意義是什麼？</strong>
+    </div>
+</section>
+
+<section>
+    <h2>第一階段：學會「如何寫程式」</h2>
+    <h3>目標</h3>
+    <ul>
+        <li>建立程式邏輯思維</li>
+        <li>理解控制流程（if / loop / function / container）</li>
+        <li>訓練手刻程式碼的基本能力</li>
+    </ul>
+
+    <h3>常見工具</h3>
+    <ul>
+        <li><code>input()</code></li>
+        <li><code>Scanner</code>、<code>next()</code></li>
+        <li>標準輸入 / 輸出（CLI）</li>
+    </ul>
+
+    <p>
+        在這個階段，輸入工具的角色是：
+    </p>
+    <div class="highlight">
+        <strong>用最小成本，讓初學者理解「程式可以接收外部資料並做出反應」。</strong>
+    </div>
+
+    <p>
+        這時候的重點不是產品，而是「程式腦」的養成。
+    </p>
+</section>
+
+<section>
+    <h2>第二階段：真的在做「可用的系統」</h2>
+
+    <h3>目標</h3>
+    <ul>
+        <li>理解並使用框架（Web / Backend / Frontend）</li>
+        <li>設計模組與系統架構</li>
+        <li>連接資料庫、處理 API</li>
+        <li>部署（Docker / 雲端）</li>
+        <li>撰寫與管理單元測試、相依套件</li>
+        <li>善用 AI 生成 boilerplate 程式碼</li>
+    </ul>
+
+    <h3>輸入資料的來源</h3>
+    <ul>
+        <li>HTTP Request（表單、Query、JSON）</li>
+        <li>前端 UI 操作</li>
+        <li>資料庫</li>
+        <li>訊息佇列或外部服務</li>
+    </ul>
+
+    <div class="highlight">
+        <strong>
+            在這個階段，輸入不再來自鍵盤，
+            而是來自「系統之間的資料流動」。
+        </strong>
+    </div>
+</section>
+
+<section>
+    <h2>一個關鍵觀念：輸入是可替換的</h2>
+
+    <p>核心邏輯應該與輸入方式解耦，例如：</p>
+
+    <code>
+def search_books(keyword):
+    # 核心商業邏輯
+    pass
+    </code>
+
+    <p>不同階段，只是換了輸入來源：</p>
+    <ul>
+        <li>CLI：<code>keyword = input()</code></li>
+        <li>Web：<code>keyword = request.args["q"]</code></li>
+        <li>API：<code>keyword = json["keyword"]</code></li>
+    </ul>
+
+    <div class="highlight">
+        <strong>
+            程式真正的價值在「處理資料的邏輯」，而不是資料從哪裡來。
+        </strong>
+    </div>
+</section>
+
+<section>
+    <h2>為什麼在第二階段幾乎不用 input / Scanner？</h2>
+    <ul>
+        <li>它們不是使用者真正互動的介面</li>
+        <li>無法代表實際系統的資料流</li>
+        <li>系統重點已轉向架構、可維護性與部署</li>
+    </ul>
+
+    <p>
+        但它們並沒有完全消失，而是退居為：
+    </p>
+    <ul>
+        <li>CLI 工具</li>
+        <li>管理腳本</li>
+        <li>測試或資料初始化輔助程式</li>
+    </ul>
+</section>
+
+<section>
+    <h2>總結</h2>
+    <div class="highlight">
+        <p>
+            第一階段學的是「怎麼寫程式」，<br />
+            第二階段學的是「怎麼把程式變成系統」。
+        </p>
+        <p>
+            <code>input()</code> 與 <code>Scanner</code> 的價值，
+            不在於未來會不會用它們做產品，
+            而在於它們幫助你跨出學會思考程式的第一步。
+        </p>
+    </div>
+</section>
+<div id="social-share" style="margin: 20px 0; text-align: center;">
+    <strong>分享此技術文件：</strong>
+    <a id="fb-share" href="#" target="_blank" style="color: #4267B2;">Facebook</a> |
+    <a id="line-share" href="#" target="_blank" style="color: #00C300;">Line</a> |
+    <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2;">X (Twitter)</a>
+</div>
+
+<div style="text-align: center; margin-bottom: 30px;">
+    <p>作者：<a href="https://www.facebook.com/profile.php?id=100056441813114" target="_blank">周彥廷</a></p>
+    <p>創作日期：西元2025年12月30日</p>
+    <img class="my_appearance" src="my_appearance2.jpg" alt="開發者自拍">
+</div>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v17.0"></script>
+<div class="fb-comments" data-href="https://chrischou19990904.github.io/harp_app_introduction" data-width="100%" data-numposts="5"></div>
+
+<script>
+    var currentUrl = window.location.href;
+    document.getElementById("fb-share").href = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+    document.getElementById("line-share").href = "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+    document.getElementById("twitter-share").href = "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=全端部署架構技術全紀錄";
+</script>
+<footer>
+    <p>© 學習筆記 · 軟體工程思維整理</p>
+</footer>
+
+</body>
+</html>
