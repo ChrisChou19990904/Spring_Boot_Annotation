@@ -2,6 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>全端部署架構與技術演進全紀錄 - 外語書商城</title>
   <style>
     :root { --primary: #6c5ce7; --secondary: #a29bfe; --success: #00b894; --bg: #f4f7f9; --text: #2d3436; --accent: #ff9800; }
@@ -37,6 +38,11 @@
     a :visited { color: #2980b9; }
     .my_appearance { border-radius: 15px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
     .footer { text-align: center; margin-top: 60px; color: #b2bec3; font-size: 0.9em; border-top: 1px solid #ddd; padding-top: 20px; }
+    @media screen and (max-width: 767px) {
+      img{
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
