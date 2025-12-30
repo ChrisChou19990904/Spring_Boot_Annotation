@@ -145,7 +145,7 @@
   </section>
   <section>
     <h2>五、 託管平台功能深度對比：為何選擇多雲架構？</h2>
-    <p>在資工專案開發中，理解不同平台的底層能力是架構設計的關鍵。以下彙整了 GitHub Pages 與全端託管平台（Vercel / Render）的核心差異：</p>
+    <p>資工開發核心觀念：<strong>檔案存放 (Storage)</strong> 不等於 <strong>環境執行 (Runtime)</strong>。雖然 GitHub Pages 可存放原始碼，但無法提供程式運行的底層環境。</p>
 
     <table class="comparison-table">
       <thead>
@@ -159,52 +159,61 @@
       <tbody>
       <tr>
         <td><strong>託管類型</strong></td>
-        <td>靜態網頁 (Static)</td>
-        <td>現代前端 (SPA/SSR)</td>
-        <td>動態後端 & 資料庫</td>
+        <td>靜態檔案服務 (File Server)</td>
+        <td>前端渲染環境 (Rendering)</td>
+        <td>邏輯運算與資料持久化</td>
       </tr>
       <tr>
-        <td><strong>支援語言</strong></td>
-        <td>純 HTML, CSS, JS</td>
-        <td>Vue, React, Node.js</td>
-        <td>Java (Spring Boot), Python, SQL</td>
+        <td><strong>代碼儲存能力</strong></td>
+        <td><span style="color: #27ae60;">✅ 可存 .java / .swift 等原始碼</span></td>
+        <td>✅ 存儲前端框架代碼</td>
+        <td>✅ 存儲後端與 SQL 邏輯</td>
       </tr>
       <tr>
-        <td><strong>後端程式執行</strong></td>
-        <td><span style="color: #e74c3c;">❌ 不支援 (無 JVM)</span></td>
-        <td><span style="color: #f39c12;">△ 僅支援 Serverless</span></td>
-        <td><span style="color: #27ae60;">✅ 完整支援 (Docker/JDK)</span></td>
+        <td><strong>程式執行能力</strong></td>
+        <td><span style="color: #e74c3c;">❌ 僅能下載，無法執行編譯後的邏輯</span></td>
+        <td><span style="color: #f39c12;">△ 支援前端 JS 邏輯</span></td>
+        <td><span style="color: #27ae60;">✅ 完整支援 (JVM / Docker 執行環境)</span></td>
       </tr>
       <tr>
         <td><strong>資料庫連線</strong></td>
-        <td><span style="color: #e74c3c;">❌ 無法連接</span></td>
-        <td><span style="color: #f39c12;">△ 需透過 API</span></td>
-        <td><span style="color: #27ae60;">✅ 原生支援 (JDBC/Pool)</span></td>
-      </tr>
-      <tr>
-        <td><strong>環境變數隱私</strong></td>
-        <td><span style="color: #e74c3c;">❌ 低 (代碼全公開)</span></td>
-        <td><span style="color: #27ae60;">✅ 高 (加密注入)</span></td>
-        <td><span style="color: #27ae60;">✅ 高 (伺服器端隔離)</span></td>
+        <td><span style="color: #e74c3c;">❌ 瀏覽器端直接連線具安全性風險</span></td>
+        <td><span style="color: #f39c12;">△ 需透過 API 轉發</span></td>
+        <td><span style="color: #27ae60;">✅ 原生支援 (JDBC 穩定通訊)</span></td>
       </tr>
       <tr>
         <td><strong>本專案定位</strong></td>
-        <td>存放技術手冊與說明文件</td>
-        <td>運行 Vue 3 前端使用者介面</td>
-        <td>執行商業邏輯與數據持久化</td>
+        <td>存放技術文檔，供使用者下載與閱讀</td>
+        <td>運行 UI，負責與使用者互動</td>
+        <td>執行 Spring Boot，處理核心業務邏輯</td>
       </tr>
       </tbody>
     </table>
 
-    <div class="logic-card" style="border-top: 4px solid var(--success);">
+    <div class="logic-card" style="border-top: 4px solid var(--primary);">
       <strong>大師觀點：</strong>
-      GitHub Pages 雖然優秀，但本質上是一個檔案伺服器，無法運行需要運算能力的 Spring Boot 或是需要儲存狀態的 PostgreSQL。
-      透過 <strong>Vercel (前端) + Render (後端) + Supabase (資料庫)</strong> 的組合，我們才真正實現了具備「大腦」與「記憶」的全端應用。
+      我們可以把 GitHub Pages 想像成一個「圖書館」，它能收藏各種語言的「書（原始碼）」，但它本身不是一個「實驗室（執行環境）」。
+      全端專案的精髓在於：<strong>在正確的平台執行正確的語言。</strong> 我們讓 Java 在具備 JVM 的 Render 上發揮算力，讓靜態文檔在 GitHub Pages 上供人閱覽。
     </div>
   </section>
   <section>
-    <h2>六、 結語：跨領域的技術融合</h2>
-    <p>這份專案代表了我從嘉大外語系對內容的感性堅持，到逢甲資工系對邏輯與架構的理性追求。我成功建立了一個具備生產等級安全性、高效運行的<a href="https://foreign-languages-book.vercel.app/" target="_blank">外語書籍電商</a>生態系。</p>
+    <h2>六、 結語：跨領域者的技術洞察與轉職實踐</h2>
+    <div class="logic-card" style="border-left: 6px solid var(--primary); background: #fdfbff;">
+      <p>
+        從畢業於<strong>嘉大外語系</strong>到進入<strong>逢甲資工學士後專班</strong>，這不僅是職涯的轉換，更是一場思維的革命。
+      </p>
+      <p>
+        在開發這份全端專案的過程中，我獲得了一個核心啟發：<strong>「代碼的價值不僅在於被存放，更在於被執行。」</strong>
+      </p>
+      <p>
+        過去在 GitHub Pages 上的靜態作品讓我學會了如何呈現資訊，但我也深刻體會到，雖然 GitHub Pages 能存放 Spring Boot 或 Swift 的原始碼，但那裡缺乏運行的環境（Runtime）。這正是資工領域最迷人的地方——我們必須為不同的代碼尋找正確的舞台。
+      </p>
+      <p>
+        透過本次專案，我成功建立了具備生產等級安全性、高效運行的
+        <a href="https://foreign-languages-book.vercel.app/" target="_blank" style="font-weight: bold; text-decoration: underline;">外語書籍電商生態系</a>。
+        我不再只是寫出漂亮的文字（外語），更開始學習建構能運轉的系統（資工）。這是我對「內容感性」與「架構理性」結合的終極實踐。
+      </p>
+    </div>
   </section>
 </div>
 
