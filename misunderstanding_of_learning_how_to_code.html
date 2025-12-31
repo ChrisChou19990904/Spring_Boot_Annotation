@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>學程式的階段、誤導與正確使用 AI 的方式</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+      "Noto Sans TC", Arial, sans-serif;
+      line-height: 1.8;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      color: #222;
+    }
+
+    header {
+      border-bottom: 2px solid #e5e7eb;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+    }
+
+    h1, h2, h3 {
+      color: #1f3a5f;
+      scroll-margin-top: 80px;
+    }
+
+    nav {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      padding: 20px;
+      margin: 30px 0;
+      border-radius: 8px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    nav li {
+      margin: 6px 0;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #2563eb;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .quote {
+      background: #f0f6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 12px 16px;
+      margin: 24px 0;
+    }
+
+    footer {
+      margin-top: 80px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    .version-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    a { color: #2980b9; }
+    a :visited { color: #2980b9; }
+    nav {
+      text-align: left;
+      background-color: pink;
+    }
+    #social-share a {
+      text-decoration: none;
+      font-weight: bold;
+    }
+    #social-share a:hover {
+      text-decoration: underline;
+    }
+    #social-share span {
+      margin: 0 5px;
+    }
+    #social-share a#fb-share {
+      color: #4267B2;
+    }
+    #social-share a#line-share {
+      color: #00C300;
+    }
+    #social-share a#twitter-share {
+      color: #1DA1F2;
+    }
+    @media screen and (max-width: 767px) {
+      img{
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="google-translate-box">
+  <div id="google_translate_element"></div>
+  <!-- Google Translate 的自動翻譯功能 -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'zh-TW',  // 頁面原語言
+        includedLanguages: 'en,es,fr,de,it,zh-CN,ja,ko,th,vi,my,id,ms,ar,he,ru,tg,uk,hi,tr,pt,nl,is,fi,sv,no,ro,kk,bo,mn,la,fil,tl,el',  // 支援的翻譯語言（可擴展）
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <p>點擊上方的語言選單以切換語言</p>
+</div>
+<nav class="toc">
+  <h2>本專案的其他內容</h2>
+  <ol>
+    <li><a href="index.html" target="_blank">Spring Boot 常用註解速查表</a></li>
+    <li><a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a></li>
+    <li><a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a></li>
+    <li><a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含四種架構示意圖）</a></li>
+    <li><a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a></li>
+    <li><a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a></li>
+    <li><a href="deployment_and_anchor_navigation.html" target="_blank">Vue3 與純 HTML 在部署與錨點導航上的差異</a></li>
+    <li><a href="Vue_DevTools.html" target="_blank">Vue DevTools 深度解析與開發痛點解決</a></li>
+    <li><a href="entity_and_dto.html" target="_blank">Spring Boot 教學：Entity、DTO、RequestDTO、ResponseDTO 與資料流</a></li>
+    <li><a href="HTTP_ERROR.html" target="_blank">本地全端開發 HTTP 錯誤說明</a></li>
+    <li><a href="About_Test.html" target="_blank">軟體品質與測試規範說明</a></li>
+    <li><a href="Full_Stack_Architecture_Guide.html" target="_blank">全端部署架構與技術演進全紀錄 - 外語書商城</a></li>
+    <li><a href="Two_Steps_Of_Learning_How_To_Code.html" target="_blank">學程式的二個階段與輸入工具的角色</a></li>
+  </ol>
+</nav>
+<header>
+  <h1>學程式的階段、常見誤導，以及如何正確使用 AI</h1>
+  <p>
+    本文件說明為什麼很多人並非不適合工程，
+    而是被錯誤的學習順序與評量方式誤導。
+  </p>
+
+  <div class="version-box">
+    <strong>適用對象：</strong> 程式初學者、轉職者、工程教學者
+  </div>
+</header>
+
+<nav>
+  <h2>目錄（Table of Contents）</h2>
+  <p>隨便點選下方其中一個主題便能直接跳到該主題的說明區</p>
+  <ul>
+    <li><a href="#section-1">一、學程式其實有不同階段</a></li>
+    <li><a href="#section-2">二、第一階段與第二階段的差異</a></li>
+    <li><a href="#section-3">三、為什麼第一階段容易讓人放棄</a></li>
+    <li><a href="#section-4">四、解題能力 vs 工程能力</a></li>
+    <li><a href="#section-5">五、這是一種結構性的誤導</a></li>
+    <li><a href="#section-6">六、一個更貼近現實的結論</a></li>
+    <li><a href="#section-7">七、用 AI 生成程式碼的正確位置</a></li>
+  </ul>
+</nav>
+
+<section id="section-1">
+  <h2>一、學程式其實有不同階段</h2>
+  <p>
+    多數人被默默灌輸一個觀念：
+    「會寫程式＝會解題」，
+    但實際上工程能力並非如此單一。
+  </p>
+</section>
+
+<section id="section-2">
+  <h2>二、第一階段與第二階段的差異</h2>
+
+  <h3>第一階段：語法與解題導向</h3>
+  <ul>
+    <li>變數、型別、輸入輸出</li>
+    <li>條件式、迴圈、函式、各種容器</li>
+    <li>手刻程式碼解邏輯題</li>
+  </ul>
+
+  <div class="quote">
+    第一階段在訓練語言，而不是在訓練工程。
+  </div>
+
+  <h3>第二階段：系統與工程實務</h3>
+  <ul>
+    <li>後端框架（Spring Boot、Django 等）</li>
+    <li>Entity / DTO / Service / Controller / Repository</li>
+    <li>前後端分離與 API 設計</li>
+    <li>資料庫、部署、環境設定</li>
+  </ul>
+
+  <div class="quote">
+    能做出系統，才是工程能力的開始。
+  </div>
+</section>
+
+<section id="section-3">
+  <h2>三、為什麼第一階段容易讓人放棄</h2>
+  <p>
+    許多題目是為了考試與解題技巧設計，
+    並不符合實務上的寫法。
+  </p>
+  <p>
+    當學習者卡關時，往往會錯誤地否定自己。
+  </p>
+</section>
+
+<section id="section-4">
+  <h2>四、解題能力 vs 工程能力</h2>
+
+  <div class="quote">
+    解題能力 ≠ 工程能力<br>
+    工程能力 ≠ 解題速度
+  </div>
+
+  <p>
+    業界更重視的是：
+    架構理解、需求轉換、維護與溝通。
+  </p>
+</section>
+
+<section id="section-5">
+  <h2>五、這是一種結構性的誤導</h2>
+  <p>
+    很多人不是被能力刷掉，
+    而是被不適合的評量方式刷掉。
+  </p>
+
+  <div class="quote">
+    被刷掉的往往是信心，而不是潛力。
+  </div>
+</section>
+
+<section id="section-6">
+  <h2>六、一個更貼近現實的結論</h2>
+
+  <div class="quote">
+    工程師不是解題機器，<br>
+    而是把混亂需求變成可運作系統的人。
+  </div>
+</section>
+
+<section id="section-7">
+  <h2>七、用 AI 生成程式碼的正確位置</h2>
+
+  <p>
+    進入第二階段後，會發現系統中有大量
+    結構固定、重複性高的程式碼。
+  </p>
+
+  <ul>
+    <li>Entity 與資料表對應</li>
+    <li>DTO 與欄位映射</li>
+    <li>Repository / CRUD</li>
+    <li>Controller 與 API 樣板</li>
+    <li>前端 API Service</li>
+  </ul>
+
+  <div class="quote">
+    懂架構的人用 AI，是自動化；<br>
+    不懂架構的人用 AI，是賭運氣。
+  </div>
+
+  <p>
+    正確的方式是：
+  </p>
+
+  <ul>
+    <li>先理解每個層級的責任</li>
+    <li>自己定義資料流與 API 規格</li>
+    <li>再請 AI 生成對應的程式碼</li>
+  </ul>
+
+  <p>
+    因此，<strong>正確使用 AI 本身就是工程能力的一部分</strong>，
+    而不是逃避基本功。
+  </p>
+</section>
+
+<div id="social-share" style="margin: 20px 0; text-align: center;">
+  <strong>分享此技術文件：</strong>
+  <a id="fb-share" href="#" target="_blank" style="color: #4267B2;">Facebook</a> |
+  <a id="line-share" href="#" target="_blank" style="color: #00C300;">Line</a> |
+  <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2;">X (Twitter)</a>
+</div>
+
+<div style="text-align: center; margin-bottom: 30px;">
+  <p>作者：<a href="https://www.facebook.com/profile.php?id=100056441813114" target="_blank">周彥廷</a></p>
+  <p>創作日期：西元2025年12月30日</p>
+  <img class="my_appearance" src="my_appearance2.jpg" alt="開發者自拍">
+</div>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v17.0"></script>
+<div class="fb-comments" data-href="https://chrischou19990904.github.io/harp_app_introduction" data-width="100%" data-numposts="5"></div>
+
+<script>
+  var currentUrl = window.location.href;
+  document.getElementById("fb-share").href = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+  document.getElementById("line-share").href = "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+  document.getElementById("twitter-share").href = "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=全端部署架構技術全紀錄";
+</script>
+
+<footer>
+  <p>
+    本文件可用於教學、分享與 GitHub Pages。
+    建議搭配實際系統專案一起閱讀。
+  </p>
+</footer>
+
+</body>
+</html>
