@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>RFC 3986 URL 編碼規範完整說明文件</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.7;
+            margin: 40px;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #1a4d8f;
+        }
+        code {
+            background-color: #eef;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 20px 0;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #e6eef8;
+        }
+        .note {
+            background-color: #fff3cd;
+            padding: 12px;
+            border-left: 5px solid #ffc107;
+            margin: 20px 0;
+        }
+        .example {
+            background-color: #e8f5e9;
+            padding: 12px;
+            border-left: 5px solid #4caf50;
+            margin: 20px 0;
+        }
+        a{
+            color: #2980b9;
+        }
+        a:visited {
+            color: #2980b9;
+        }
+        nav {
+            text-align: left;
+            background-color: pink;
+        }
+        #social-share a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #social-share a:hover {
+            text-decoration: underline;
+        }
+        #social-share span {
+            margin: 0 5px;
+        }
+        #social-share a#fb-share {
+            color: #4267B2;
+        }
+        #social-share a#line-share {
+            color: #00C300;
+        }
+        #social-share a#twitter-share {
+            color: #1DA1F2;
+        }
+    </style>
+</head>
+<body>
+<div id="google-translate-box">
+    <div id="google_translate_element"></div>
+    <!-- Google Translate 的自動翻譯功能 -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'zh-TW',  // 頁面原語言
+                includedLanguages: 'en,es,fr,de,it,zh-CN,ja,ko,th,vi,my,id,ms,ar,he,ru,tg,uk,hi,tr,pt,nl,is,fi,sv,no,ro,kk,bo,mn,la,fil,tl,el',  // 支援的翻譯語言（可擴展）
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <p>點擊上方的語言選單以切換語言</p>
+</div>
+<nav>
+    <h2>本專案的其他內容</h2>
+    <ol>
+        <li><a href="index.html" target="_blank">Spring Boot 常用註解速查表</a></li>
+        <li><a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a></li>
+        <li><a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a></li>
+        <li><a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含四種架構示意圖）</a></li>
+        <li><a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a></li>
+        <li><a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a></li>
+        <li><a href="deployment_and_anchor_navigation.html" target="_blank">Vue3 與純 HTML 在部署與錨點導航上的差異</a></li>
+        <li><a href="Vue_DevTools.html" target="_blank">Vue DevTools 深度解析與開發痛點解決</a></li>
+        <li><a href="entity_and_dto.html" target="_blank">Spring Boot 教學：Entity、DTO、RequestDTO、ResponseDTO 與資料流</a></li>
+        <li><a href="HTTP_ERROR.html" target="_blank">本地全端開發 HTTP 錯誤說明</a></li>
+        <li><a href="About_Test.html" target="_blank">軟體品質與測試規範說明</a></li>
+        <li><a href="Full_Stack_Architecture_Guide.html" target="_blank">全端部署架構與技術演進全紀錄 - 外語書商城</a></li>
+        <li><a href="Two_Steps_Of_Learning_How_To_Code.html" target="_blank">學程式的二個階段與輸入工具的角色</a></li>
+        <li><a href="misunderstanding_of_learning_how_to_code.html" target="_blank">學程式的階段、誤導與正確使用 AI 的方式</a></li>
+    </ol>
+</nav>
+<h1>RFC 3986 URL 編碼規範完整說明</h1>
+
+<p>
+    RFC 3986 是由 IETF（Internet Engineering Task Force）制定的標準，
+    正式名稱為 <strong>Uniform Resource Identifier (URI): Generic Syntax</strong>。
+    本文件定義了 URL / URI 的通用語法結構與字元編碼方式（Percent-Encoding）。
+</p>
+
+<hr>
+
+<h2>一、URI 基本結構</h2>
+
+<pre>
+scheme://authority/path?query#fragment
+</pre>
+
+<p>範例：</p>
+
+<pre>
+https://example.com/products/list?id=100#top
+</pre>
+
+<table>
+    <tr><th>部分</th><th>說明</th></tr>
+    <tr><td>scheme</td><td>協定（http, https, ftp...）</td></tr>
+    <tr><td>authority</td><td>網域名稱或 IP</td></tr>
+    <tr><td>path</td><td>資源路徑</td></tr>
+    <tr><td>query</td><td>查詢參數</td></tr>
+    <tr><td>fragment</td><td>頁面錨點</td></tr>
+</table>
+
+<hr>
+
+<h2>二、字元分類</h2>
+
+<h3>1. Unreserved Characters（不需編碼）</h3>
+
+<pre>
+A–Z
+a–z
+0–9
+- _ . ~
+</pre>
+
+<p>這些字元可以直接使用，不需要進行編碼。</p>
+
+<h3>2. Reserved Characters（保留字元）</h3>
+
+<pre>
+: / ? # [ ] @
+! $ & ' ( ) * + , ; =
+</pre>
+
+<p>這些字元在 URL 中有特殊用途，若作為資料使用，必須進行編碼。</p>
+
+<hr>
+
+<h2>三、Percent-Encoding（百分比編碼）</h2>
+
+<p>編碼格式：</p>
+
+<pre>
+%HH
+</pre>
+
+<p>HH 為字元的十六進位表示（ASCII 或 UTF-8 byte）。</p>
+
+<table>
+    <tr><th>字元</th><th>ASCII</th><th>編碼</th></tr>
+    <tr><td>空白</td><td>0x20</td><td>%20</td></tr>
+    <tr><td>?</td><td>0x3F</td><td>%3F</td></tr>
+    <tr><td>#</td><td>0x23</td><td>%23</td></tr>
+</table>
+
+<hr>
+
+<h2>四、非 ASCII 字元（UTF-8 編碼規則）</h2>
+
+<p>所有非 ASCII 字元必須：</p>
+
+<ol>
+    <li>轉為 UTF-8</li>
+    <li>逐 byte 轉為 %HH</li>
+</ol>
+
+<p>例如：「中文」</p>
+
+<pre>
+UTF-8:
+E4 B8 AD E6 96 87
+
+Percent-Encoding:
+%E4%B8%AD%E6%96%87
+</pre>
+
+<hr>
+
+<h2>五、實際範例（德文句子）</h2>
+
+<div class="example">
+    原始字串：<br>
+    <code>eristeinfleißigerSchülerwährenddueinegroßeLehrerinbistalsokönntihrFreundesein</code>
+</div>
+
+<p>此字串包含：</p>
+<ul>
+    <li>ß</li>
+    <li>ü</li>
+    <li>ä</li>
+    <li>ö</li>
+</ul>
+
+<p>這些都不是 ASCII 字元，因此必須進行 UTF-8 + Percent-Encoding。</p>
+
+<pre>
+eristeinflei%C3%9FigerSch%C3%BClerw%C3%A4hrenddueinegro%C3%9FeLehrerinbistalsok%C3%B6nntihrFreundesein
+</pre>
+
+<p>編碼後才符合 RFC 3986 規範。</p>
+
+<hr>
+
+<h2>六、空白是 %20 還是 + ?</h2>
+
+<table>
+    <tr><th>情境</th><th>表示方式</th></tr>
+    <tr><td>RFC 3986 標準 URI</td><td>%20</td></tr>
+    <tr><td>application/x-www-form-urlencoded（HTML 表單）</td><td>+</td></tr>
+</table>
+
+<div class="note">
+    注意：<br>
+    RFC 3986 僅定義 %20。<br>
+    「+」是 HTML 表單提交格式，不屬於 RFC 3986 本身規範。
+</div>
+
+<hr>
+
+<h2>七、RFC 3986 的用途</h2>
+
+<ul>
+    <li>設計 RESTful API</li>
+    <li>OAuth 簽名計算</li>
+    <li>雲端服務請求簽章（如 AWS Signature）</li>
+    <li>瀏覽器 URL 解析</li>
+    <li>避免雙重編碼漏洞</li>
+    <li>避免 Query 參數解析錯誤</li>
+</ul>
+
+<p>若未遵守 RFC 3986，可能導致：</p>
+
+<ul>
+    <li>API 參數錯誤</li>
+    <li>驗證簽名失敗</li>
+    <li>資安漏洞（例如編碼繞過）</li>
+</ul>
+
+<hr>
+
+<h2>八、總結</h2>
+
+<ul>
+    <li>安全字元可直接使用</li>
+    <li>保留字元作為資料時必須編碼</li>
+    <li>所有非 ASCII 字元必須轉為 UTF-8 再編碼</li>
+    <li>標準 URI 空白必須為 %20</li>
+</ul>
+
+<hr>
+
+<p style="font-size: 0.9em; color: #777;">
+    本文件依 RFC 3986 標準整理說明
+</p>
+<ul id="messages"></ul>
+<div id="social-share" style="margin-top: 20px;">
+    <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
+    <span> | </span>
+    <a id="line-share" href="#" target="_blank" style="color: #00C300; font-weight: bold;">分享到 Line</a>
+    <span> | </span>
+    <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2; font-weight: bold;">分享到 X</a>
+</div>
+<script>
+    // 自動抓取當前頁面的 URL
+    var currentUrl = window.location.href;
+    // Facebook 分享
+    document.getElementById("fb-share").href =
+        "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+    // Line 分享
+    document.getElementById("line-share").href =
+        "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+    // X (Twitter) 分享
+    document.getElementById("twitter-share").href =
+        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=你的文章標題";
+</script>
+作者：<a href="https://www.facebook.com/profile.php?id=100056441813114&locale=zh_TW" target="_blank">周彥廷</a>
+<br>創作日期：西元二零二六年二月十九日<br>
+<img class="my_appearance" width="540" height="720" src="my_appearance2.jpg" alt="自拍">
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v17.0" nonce="yourNonce">
+</script>
+<div class="fb-comments"
+     data-href="https://chrischou19990904.github.io/harp_app_introduction"
+     data-width="100%"
+     data-numposts="5">
+</div>
+</body>
+</html>
