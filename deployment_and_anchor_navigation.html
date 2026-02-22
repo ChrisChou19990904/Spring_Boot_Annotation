@@ -56,6 +56,60 @@
         nav {
             text-align: left;
         }
+        /* 結論表格專用樣式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* 增加輕微陰影，提升層次感 */
+            border-radius: 8px;
+            overflow: hidden; /* 確保圓角效果 */
+        }
+
+        thead tr {
+            background-color: #35495e; /* 深藍色背景，顯得沈穩專業 */
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #eeeeee;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #dddddd;
+            transition: background-color 0.2s ease; /* 平滑過渡效果 */
+        }
+
+        tbody tr:nth-of-type(even) {
+            background-color: #f8f9fa; /* 隔行變色，增加易讀性 */
+        }
+
+        tbody tr:last-of-type {
+            border-bottom: 2px solid #42b883; /* 底部使用 Vue 綠色點綴 */
+        }
+
+        tbody tr:hover {
+            background-color: #f1fdf5; /* 滑鼠懸停時變為淡綠色，增加互動感 */
+        }
+
+        /* 強調文字樣式 */
+        td strong {
+            color: #2c3e50;
+            border-bottom: 2px solid #42b883;
+        }
+
+        /* 響應式：手機版自動捲動 */
+        @media screen and (max-width: 600px) {
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
         @media screen and (max-width: 767px) {
             .my_appearance{
                 width:270px;
@@ -199,17 +253,39 @@
     這能清楚展現你不只會寫 HTML，而是了解現代前端開發的工程化流程。
 </p>
 
-<h2 id="section5">5. 結論</h2>
+<h2 id="section5">5. 結論與技術決策</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>情境</th>
+        <th>推薦技術</th>
+        <th>關鍵考量</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><strong>內容型/文章網站</strong></td>
+        <td>純 HTML / SSG</td>
+        <td>原生支援錨點分享、SEO 優、部署零成本。</td>
+    </tr>
+    <tr>
+        <td><strong>互動型/管理系統</strong></td>
+        <td>Vue3 (SPA)</td>
+        <td>組件化開發、狀態管理、複雜的前端邏輯處理。</td>
+    </tr>
+    <tr>
+        <td><strong>求職/技術展示</strong></td>
+        <td>Vue3 + Vite</td>
+        <td>展現對工程化工具、打包佈署及現代框架的掌握度。</td>
+    </tr>
+    </tbody>
+</table>
 
 <ul>
-    <li><strong>若目的是閱讀體驗：</strong>純 HTML 是最好的選擇。</li>
-    <li><strong>若目的是求職作品集：</strong>可額外使用 Vue3 製作一份版本以展示技能深度。</li>
-    <li>Vue3 部署較複雜，錨點需額外實作；HTML 簡潔直覺但在手機上也可能出現偏移。</li>
+    <li><strong>導航策略：</strong>在 Vue3 中建議使用 <code>scrollBehavior</code> 設定，或 CSS 的 <code>scroll-margin-top</code> 來解決標題遮擋問題。</li>
+    <li><strong>平衡點：</strong>可以將「說明文件」用 HTML 撰寫以利閱讀，而「核心功能」使用 Vue3 實作，達到技術展示與體驗的最佳平衡。</li>
 </ul>
-
-<p>
-    根據網站目標選擇最適合的技術，才能同時兼顧使用者體驗與職涯發展需求。
-</p>
 <ul id="messages"></ul>
 <div id="social-share" style="margin-top: 20px;">
     <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
