@@ -261,30 +261,30 @@ contact.html
 <table>
     <thead>
     <tr>
-        <th>問題</th>
-        <th>解答</th>
+        <th>常見問題與誤區</th>
+        <th>專業解答</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td>能否用 Vue 製作十頁以上網站？</td>
-        <td>✅ 可以，非常常見</td>
+        <td><strong>能否製作十頁以上的網站？</strong></td>
+        <td>✅ 可以。透過 <code>Vue Router</code> 進行路由管理，非常適合大型多頁面應用。</td>
     </tr>
     <tr>
-        <td>是否需要十幾個 Vue 檔案？</td>
-        <td>✅ 通常會有十幾個「view」檔案，但共用元件可重用</td>
+        <td><strong>是否等同於傳統多個 HTML？</strong></td>
+        <td>❌ 不同。SPA 僅需一個 <code>index.html</code>，透過 JavaScript 動態切換<strong>元件 (Component)</strong> 來改變內容。</td>
     </tr>
     <tr>
-        <td>是否等同於十個 HTML？</td>
-        <td>❌ 不同概念，只需一個 <code>index.html</code></td>
+        <td><strong>能否在新分頁開啟特定頁面？</strong></td>
+        <td>✅ 可以。使用 <code>&lt;router-link target="_blank"&gt;</code> 即可，但新分頁會重新初始化 Vue 實例，<strong>全域狀態 (State)</strong> 無法直接共用。</td>
     </tr>
     <tr>
-        <td>主要好處</td>
-        <td>共用集中、切換快速、邏輯一致</td>
+        <td><strong>主要效能優勢</strong></td>
+        <td>✅ <strong>局部刷新</strong>。換頁時無需重新下載 CSS 與共用 JS，使用者體驗極為流暢。</td>
     </tr>
     <tr>
-        <td>壞處</td>
-        <td>❌ 無法像傳統 HTML 網站那樣直接在新視窗中開啟多個頁面進行對比，SPA 無法同時顯示多個頁面視圖。</td>
+        <td><strong>開發與維護挑戰</strong></td>
+        <td>⚠️ <strong>SEO 優化</strong>。純 SPA 對搜尋引擎爬蟲較不友善，若有 SEO 需求需改用 SSR (如 Nuxt.js) 或預渲染技術。</td>
     </tr>
     </tbody>
 </table>
