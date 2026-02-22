@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>螢幕錄影完整說明與動畫示意</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 900px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            overflow-x: auto;
+            border-radius: 5px;
+        }
+        ul {
+            margin-left: 20px;
+        }
+        .note {
+            background-color: #fcf8e3;
+            border-left: 5px solid #f0ad4e;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .diagram {
+            text-align: center;
+            margin: 40px 0;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .box {
+            fill: #3498db;
+            fill-opacity: 0.1;
+            stroke: #2980b9;
+            stroke-width: 2;
+            rx: 8;
+            ry: 8;
+        }
+        .label {
+            font-size: 14px;
+            fill: #2c3e50;
+            font-weight: bold;
+        }
+        .arrow {
+            stroke: #2c3e50;
+            stroke-width: 2;
+            marker-end: url(#arrowhead);
+        }
+        /* 下拉選單動畫 */
+        .dropdown-container {
+            display: inline-block;
+            position: relative;
+            margin: 20px 0;
+        }
+        .dropdown-button {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .dropdown {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 120px;
+            background: #3498db;
+            color: white;
+            border-radius: 4px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: dropdownFade 2s infinite alternate;
+        }
+        .dropdown li {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .dropdown li:hover {
+            background: #2980b9;
+        }
+        #social-share a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #social-share a:hover {
+            text-decoration: underline;
+        }
+        #social-share span {
+            margin: 0 5px;
+        }
+        #social-share a#fb-share {
+            color: #4267B2;
+        }
+        #social-share a#line-share {
+            color: #00C300;
+        }
+        #social-share a#twitter-share {
+            color: #1DA1F2;
+        }
+        a{
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #2980b9;
+        }
+        @keyframes dropdownFade {
+            0% { opacity: 0; transform: translateY(-10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<div id="google-translate-box">
+    <div id="google_translate_element"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'zh-TW',  // 頁面原語言
+                includedLanguages: 'en,es,fr,de,it,zh-CN,ja,ko,th,vi,my,id,ms,ar,he,ru,tg,uk,hi,tr,pt,nl,is,fi,sv,no,ro,kk,bo,mn,la,fil,tl,el',  // 支援的翻譯語言（可擴展）
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <p>點擊上方的語言選單以切換語言</p>
+</div>
+<nav>
+    <h2>本專案的其他內容</h2>
+    <ol>
+        <li><a href="index.html" target="_blank">Spring Boot 常用註解速查表</a></li>
+        <li><a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a></li>
+        <li><a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a></li>
+        <li><a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含四種架構示意圖）</a></li>
+        <li><a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a></li>
+        <li><a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a></li>
+        <li><a href="deployment_and_anchor_navigation.html" target="_blank">Vue3 與純 HTML 在部署與錨點導航上的差異</a></li>
+        <li><a href="Vue_DevTools.html" target="_blank">Vue DevTools 深度解析與開發痛點解決</a></li>
+        <li><a href="entity_and_dto.html" target="_blank">Spring Boot 教學：Entity、DTO、RequestDTO、ResponseDTO 與資料流</a></li>
+        <li><a href="HTTP_ERROR.html" target="_blank">本地全端開發 HTTP 錯誤說明</a></li>
+        <li><a href="About_Test.html" target="_blank">軟體品質與測試規範說明</a></li>
+        <li><a href="Full_Stack_Architecture_Guide.html" target="_blank">全端部署架構與技術演進全紀錄 - 外語書商城</a></li>
+        <li><a href="Two_Steps_Of_Learning_How_To_Code.html" target="_blank">學程式的二個階段與輸入工具的角色</a></li>
+        <li><a href="misunderstanding_of_learning_how_to_code.html" target="_blank">學程式的階段、誤導與正確使用 AI 的方式</a></li>
+        <li><a href="RFC_3986_URL.html" target="_blank">RFC 3986 URL 編碼規範完整說明</a></li>
+        <li><a href="html-whitespace-collapsing-explanation.html" target="_blank">HTML 空白折疊與自動換行說明文件</a></li>
+    </ol>
+</nav>
+<h1>Windows 內建螢幕錄影與下拉選單說明</h1>
+
+<h2>1. Windows + Alt + R 的錄影行為</h2>
+<p>使用 <code>Windows + Alt + R</code> 呼叫的內建錄影工具是 <strong>Xbox Game Bar</strong>，主要針對遊戲或單一視窗錄影。</p>
+<ul>
+    <li>錄影抓取的是「目前活動視窗的 buffer」。</li>
+    <li>浮動元件（例如下拉選單、modal）有時不會被錄到。 </li>
+    <li>螢幕錄影計時器通常不會出現在錄影中，因為它是系統 overlay。 </li>
+</ul>
+
+<div class="note">
+    注意：這不是程式問題，而是 Xbox Game Bar 的設計限制。
+</div>
+
+<h2>2. 為什麼下拉選單會消失？</h2>
+<p>現代瀏覽器（Chrome、Edge）會將畫面拆成多個 GPU 合成層：</p>
+<ul>
+    <li><strong>主畫面層</strong>：一般 DOM 元素。</li>
+    <li><strong>浮動層 / portal / tooltip / 下拉選單</strong>：可能渲染到 GPU 合成層。 </li>
+</ul>
+<p>Xbox Game Bar 有時只抓主畫面層，因此浮動層會消失。</p>
+
+<h2>3. 手機內建螢幕錄影行為差異</h2>
+<ul>
+    <li>手機錄影抓的是整個 framebuffer。</li>
+    <li>所有渲染層都會被錄到，包括下拉選單、鍵盤、通知。 </li>
+    <li>因此手機錄影看起來完整，不會有元素消失。 </li>
+</ul>
+
+<h2>4. 與 HTML 的關聯性</h2>
+<p>HTML 本身只是 DOM 結構標記，例如 <code>&lt;select&gt;</code> 或 <code>&lt;div&gt;</code>。它不會決定螢幕錄影效果。</p>
+<p>真正影響是否錄到的因素是：</p>
+<ul>
+    <li>瀏覽器如何渲染：CSS、JS、portal/teleport 會把浮動元件渲染到不同圖層。</li>
+    <li>錄影工具抓取的圖層範圍。</li>
+</ul>
+
+<h2>5. 解決方式</h2>
+<ol>
+    <li>錄整個桌面而不是單一視窗。</li>
+    <li>關閉瀏覽器硬體加速（設定 → 系統 → 關閉硬體加速）。</li>
+    <li>使用專業工具，例如 <strong>OBS Studio</strong>，抓取完整畫面。 </li>
+</ol>
+
+<h2>6. 流程圖示意</h2>
+<div class="diagram">
+    <svg width="800" height="400">
+        <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="#2c3e50" />
+            </marker>
+        </defs>
+
+        <rect x="50" y="50" width="200" height="60" class="box"/>
+        <text x="150" y="80" text-anchor="middle" class="label">HTML 結構 (DOM)</text>
+
+        <rect x="300" y="50" width="200" height="120" class="box"/>
+        <text x="400" y="80" text-anchor="middle" class="label">瀏覽器圖層</text>
+        <text x="400" y="100" text-anchor="middle" class="label" font-weight="normal" font-size="12px">- 主畫面層</text>
+        <text x="400" y="115" text-anchor="middle" class="label" font-weight="normal" font-size="12px">- 浮動層 (dropdown, tooltip)</text>
+
+        <line x1="250" y1="80" x2="300" y2="80" class="arrow"/>
+
+        <rect x="550" y="30" width="200" height="60" class="box"/>
+        <text x="650" y="60" text-anchor="middle" class="label">Xbox Game Bar</text>
+        <text x="650" y="75" text-anchor="middle" class="label" font-weight="normal" font-size="12px">- 主要抓主畫面層</text>
+        <text x="650" y="90" text-anchor="middle" class="label" font-weight="normal" font-size="12px">- 浮動層可能消失</text>
+
+        <line x1="500" y1="80" x2="550" y2="60" class="arrow"/>
+
+        <rect x="550" y="150" width="200" height="60" class="box"/>
+        <text x="650" y="180" text-anchor="middle" class="label">手機螢幕錄影</text>
+        <text x="650" y="195" text-anchor="middle" class="label" font-weight="normal" font-size="12px">- 抓 framebuffer</text>
+        <text x="650" y="210" text-anchor="middle" class="label" font-weight="normal" font-size="12px">- 所有層都錄到</text>
+
+        <line x1="500" y1="110" x2="550" y2="180" class="arrow"/>
+    </svg>
+</div>
+
+<h2>7. 下拉選單動畫示意</h2>
+<p>模擬下拉選單在錄影中可能消失的情況：</p>
+
+<div class="dropdown-container">
+    <button class="dropdown-button">選擇城市 ▼</button>
+    <ul class="dropdown">
+        <li>台北</li>
+        <li>台中</li>
+        <li>高雄</li>
+    </ul>
+</div>
+
+<p><strong>說明：</strong></p>
+<ul>
+    <li><code>Xbox Game Bar</code>錄影時，下拉選單可能不會顯示 → 模擬為消失動畫。</li>
+    <li>手機螢幕錄影則會正常錄到所有層 → 模擬為淡入顯示。</li>
+</ul>
+<h2>8. 影片作證</h2>
+<p>以下是實際錄影示範，展示 Windows Xbox Game Bar 與手機螢幕錄影的差異：</p>
+<ol>
+    <li>
+        <strong>Windows Xbox Game Bar 錄影示範：</strong><br>
+        <video style="border:10px red solid" controls>
+            <source src="外語書城電腦錄影.mp4" type="video/mp4">
+            您的瀏覽器不支援影片播放。
+        </video><br>
+        <video style="border:10px red solid" controls>
+            <source src="音樂表演電腦錄影.mp4" type="video/mp4">
+        </video>
+    </li>
+    <li>
+        <strong>手機螢幕錄影示範：</strong><br>
+        <video style="border:10px green solid" controls>
+            <source src="外語書城手機錄影.mp4" type="video/mp4">
+            您的瀏覽器不支援影片播放。
+        </video><br>
+        <video style="border:10px green solid" controls>
+            <source src="音樂表演手機錄影.mp4" type="video/mp4">
+        </video>
+</ol>
+<h2>9. 電腦與手機錄影的計時器差異</h2>
+<p>除了錄製範圍的不同，電腦與手機錄影的另一個重要差異在於是否顯示計時器：</p>
+<ul>
+    <li><strong>電腦 (Windows Xbox Game Bar)：</strong> 電腦內建的 Xbox Game Bar 在進行螢幕錄影時會顯示計時器，顯示已過了多少時間。然而，由於計時器是系統覆蓋層，這部分通常不會出現在實際錄好的畫面中。</li>
+    <li><strong>手機：</strong> 手機的內建螢幕錄影裝置在進行螢幕錄影時通常不會顯示計時器，但會錄製整個畫面，包括狀態欄、通知等。這意味著手機錄影會有一個更完整的錄影體驗，不會錯過任何畫面元素。</li>
+</ul>
+<p><strong>總結：</strong> 在 Windows Xbox Game Bar 的錄影中，計時器顯示與否是一個系統層級的限制，而手機螢幕錄影則可以完整錄製所有顯示的內容。</p>
+<h2>10. 小結</h2>
+<ul>
+    <li>Windows Xbox Game Bar 錄影計時器不會出現，是正常行為。</li>
+    <li>下拉選單消失，是因為 GPU 合成層沒有被錄到，而非 HTML 問題。</li>
+    <li>手機螢幕錄影抓 framebuffer，所以所有畫面元素都會錄到。</li>
+    <li>錄影效果差異主要取決於「錄影工具抓取的圖層」而非程式碼。 </li>
+</ul>
+<ul id="messages"></ul>
+<div id="social-share" style="margin-top: 20px;">
+    <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
+    <span> | </span>
+    <a id="line-share" href="#" target="_blank" style="color: #00C300; font-weight: bold;">分享到 Line</a>
+    <span> | </span>
+    <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2; font-weight: bold;">分享到 X</a>
+</div>
+<script>
+    // 自動抓取當前頁面的 URL
+    var currentUrl = window.location.href;
+    // Facebook 分享
+    document.getElementById("fb-share").href =
+        "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+    // Line 分享
+    document.getElementById("line-share").href =
+        "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+    // X (Twitter) 分享
+    document.getElementById("twitter-share").href =
+        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=你的文章標題";
+</script>
+<footer style="text-align: center; background-color: purple; color:yellow; font-size: 50px">
+    作者：<a href="https://www.facebook.com/profile.php?id=100056441813114&locale=zh_TW" target="_blank" style="color:white;">周彥廷</a>
+    <br>創作日期：西元二零二六年二月二十二日<br>
+    <img class="my_appearance" width="540" height="720" src="my_appearance2.jpg" alt="自拍">
+    <br>
+</footer>
+</body>
+</html>
