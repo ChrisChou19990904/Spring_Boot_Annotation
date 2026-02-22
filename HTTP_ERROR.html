@@ -77,6 +77,60 @@
         #social-share a#twitter-share {
             color: #1DA1F2;
         }
+        /* 結論表格專用樣式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* 增加輕微陰影，提升層次感 */
+            border-radius: 8px;
+            overflow: hidden; /* 確保圓角效果 */
+        }
+
+        thead tr {
+            background-color: #35495e; /* 深藍色背景，顯得沈穩專業 */
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #eeeeee;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #dddddd;
+            transition: background-color 0.2s ease; /* 平滑過渡效果 */
+        }
+
+        tbody tr:nth-of-type(even) {
+            background-color: #f8f9fa; /* 隔行變色，增加易讀性 */
+        }
+
+        tbody tr:last-of-type {
+            border-bottom: 2px solid #42b883; /* 底部使用 Vue 綠色點綴 */
+        }
+
+        tbody tr:hover {
+            background-color: #f1fdf5; /* 滑鼠懸停時變為淡綠色，增加互動感 */
+        }
+
+        /* 強調文字樣式 */
+        td strong {
+            color: #2c3e50;
+            border-bottom: 2px solid #42b883;
+        }
+
+        /* 響應式：手機版自動捲動 */
+        @media screen and (max-width: 600px) {
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
         @media screen and (max-width: 767px) {
             img{
                 max-width: 100%;
@@ -243,20 +297,25 @@ axios.post('/api/login', data, {
 
 <!-- 除錯流程 -->
 <div class="card">
-    <h2>正確除錯順序（請照這個來）</h2>
-    <ol>
-        <li>開啟 Spring Security DEBUG log</li>
-        <li>確認 F12 有送 Authorization Header</li>
-        <li>確認 OPTIONS 沒被擋</li>
-        <li>確認 CORS 設定</li>
-        <li>確認 Controller 是否被 hit</li>
-        <li>最後才檢查 JWT 解析邏輯</li>
-    </ol>
-
-    <div class="tip">
-        <strong>記住一句話：</strong><br>
-        改 JWT 沒用，代表問題在它前面。
-    </div>
+    <h2>🚀 快速除錯定位心法</h2>
+    <table>
+        <tr>
+            <th>錯誤現象</th>
+            <th>首要懷疑對象</th>
+        </tr>
+        <tr>
+            <td>Console 報 403，但後端 Log 沒動靜</td>
+            <td>CORS 設定 或 Spring Security Filter</td>
+        </tr>
+        <tr>
+            <td>後端 Log 報 <code>Bad Credentials</code></td>
+            <td>JWT SecretKey 錯位 或 過期</td>
+        </tr>
+        <tr>
+            <td>後端 Log 有進 Controller 但噴 400</td>
+            <td>Jackson 解析 DTO 失敗 (欄位名稱對不上)</td>
+        </tr>
+    </table>
 </div>
 <ul id="messages"></ul>
 <div id="social-share" style="margin-top: 20px;">
