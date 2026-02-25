@@ -51,9 +51,28 @@
         a:hover {
             text-decoration: underline;
         }
-            a:visited {
+        a:visited {
                 color: #2980b9;
-            }
+        }
+        #social-share a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #social-share a:hover {
+            text-decoration: underline;
+        }
+        #social-share span {
+            margin: 0 5px;
+        }
+        #social-share a#fb-share {
+            color: #4267B2;
+        }
+        #social-share a#line-share {
+            color: #00C300;
+        }
+        #social-share a#twitter-share {
+            color: #1DA1F2;
+        }
     </style>
 </head>
 
@@ -336,5 +355,32 @@
         RSA 是非對稱式加密，使用公私鑰，安全性建立在質因數分解困難，通常用於金鑰交換與數位簽章；兩者實務上常結合使用。
     </p>
 </div>
+<ul id="messages"></ul>
+<div id="social-share" style="margin-top: 20px;">
+    <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
+    <span> | </span>
+    <a id="line-share" href="#" target="_blank" style="color: #00C300; font-weight: bold;">分享到 Line</a>
+    <span> | </span>
+    <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2; font-weight: bold;">分享到 X</a>
+</div>
+<script>
+    // 自動抓取當前頁面的 URL
+    var currentUrl = window.location.href;
+    // Facebook 分享
+    document.getElementById("fb-share").href =
+        "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+    // Line 分享
+    document.getElementById("line-share").href =
+        "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+    // X (Twitter) 分享
+    document.getElementById("twitter-share").href =
+        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=你的文章標題";
+</script>
+<footer style="text-align: center; background-color: purple; color:yellow; font-size: 50px">
+    作者：<a href="https://www.facebook.com/profile.php?id=100056441813114&locale=zh_TW" target="_blank" style="color:white;">周彥廷</a>
+    <br>創作日期：西元二零二六年二月二十五日<br>
+    <img width="540" height="720" src="my_appearance2.jpg" alt="自拍">
+    <br>
+</footer>
 </body>
 </html>
