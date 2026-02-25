@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>密碼學口試筆記</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.8;
+            margin: 40px;
+            background-color: #f4f6f8;
+        }
+        h1 {
+            text-align: center;
+        }
+        h2 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 8px;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .highlight {
+            color: #c0392b;
+            font-weight: bold;
+        }
+        ul {
+            margin-left: 20px;
+        }
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .compare-table th, .compare-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        .compare-table th {
+            background-color: #ecf0f1;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>密碼學口試重點筆記</h1>
+
+<div class="section">
+    <h2>一、對稱式加密（Symmetric Encryption）</h2>
+    <p><span class="highlight">定義：</span>加密與解密使用同一把金鑰。</p>
+    <p><span class="highlight">代表演算法：</span>AES</p>
+
+    <p><span class="highlight">優點：</span></p>
+    <ul>
+        <li>速度快</li>
+        <li>適合大量資料加密</li>
+        <li>計算成本低</li>
+    </ul>
+
+    <p><span class="highlight">缺點：</span></p>
+    <ul>
+        <li>金鑰分配困難</li>
+        <li>不適合多方通訊</li>
+    </ul>
+
+    <p><span class="highlight">實務應用：</span>通常搭配公鑰加密進行 Hybrid Encryption。</p>
+</div>
+
+
+<div class="section">
+    <h2>二、非對稱式加密（Public Key Encryption）</h2>
+    <p><span class="highlight">定義：</span>使用公鑰加密、私鑰解密。</p>
+    <p><span class="highlight">代表演算法：</span>RSA</p>
+
+    <p><span class="highlight">特性：</span></p>
+    <ul>
+        <li>解決金鑰分配問題</li>
+        <li>計算較慢</li>
+    </ul>
+
+    <p><span class="highlight">實務應用：</span>通常用來交換對稱式加密的 Session Key。</p>
+</div>
+
+
+<div class="section">
+    <h2>三、雜湊函數（Hash Function）</h2>
+    <p><span class="highlight">定義：</span>將任意長度輸入轉為固定長度輸出，不可逆。</p>
+    <p><span class="highlight">代表演算法：</span>SHA-256</p>
+
+    <p><span class="highlight">特性：</span></p>
+    <ul>
+        <li>不可逆</li>
+        <li>固定輸出長度</li>
+        <li>Avalanche Effect</li>
+    </ul>
+
+    <p><span class="highlight">用途：</span></p>
+    <ul>
+        <li>密碼儲存（需加 salt）</li>
+        <li>資料完整性驗證</li>
+    </ul>
+</div>
+
+
+<div class="section">
+    <h2>四、數位簽章（Digital Signature）</h2>
+    <p><span class="highlight">目的：</span>驗證身份 + 保證資料未被竄改。</p>
+
+    <p><span class="highlight">流程：</span></p>
+    <ol>
+        <li>對訊息做 Hash</li>
+        <li>用私鑰加密該 Hash</li>
+        <li>接收方用公鑰驗證</li>
+    </ol>
+
+    <p><span class="highlight">重點：</span>簽章 ≠ 加密。簽章強調「認證與完整性」。</p>
+</div>
+
+
+<div class="section">
+    <h2>五、SSL / TLS 在做什麼？</h2>
+    <p><span class="highlight">功能：</span>保護 Client 與 Server 之間的通訊安全。</p>
+
+    <p><span class="highlight">提供三大安全性：</span></p>
+    <ul>
+        <li>機密性（加密傳輸）</li>
+        <li>完整性（防止竄改）</li>
+        <li>身份驗證（憑證機制）</li>
+    </ul>
+
+    <p><span class="highlight">基本流程：</span></p>
+    <ol>
+        <li>伺服器提供數位憑證</li>
+        <li>使用公鑰交換 Session Key</li>
+        <li>後續通訊使用對稱式加密</li>
+    </ol>
+
+    <p><span class="highlight">注意：</span>HTTPS ≠ 絕對安全，只保障傳輸安全。</p>
+</div>
+
+
+<div class="section">
+    <h2>六、加密 vs Hash 比較</h2>
+    <table class="compare-table">
+        <tr>
+            <th>項目</th>
+            <th>加密</th>
+            <th>Hash</th>
+        </tr>
+        <tr>
+            <td>可逆性</td>
+            <td>可逆</td>
+            <td>不可逆</td>
+        </tr>
+        <tr>
+            <td>是否需要金鑰</td>
+            <td>需要</td>
+            <td>不需要</td>
+        </tr>
+        <tr>
+            <td>主要用途</td>
+            <td>機密性</td>
+            <td>完整性</td>
+        </tr>
+    </table>
+</div>
+<div class="section">
+    <h2>七、PostgreSQL 在全端會員系統中的加密機制</h2>
+
+    <p><span class="highlight">1️⃣ 傳輸加密（Client ↔ Server）</span></p>
+    <ul>
+        <li>使用 TLS（SSL）保護資料庫連線</li>
+        <li>防止中間人攻擊（MITM）</li>
+        <li>確保傳輸過程中的機密性與完整性</li>
+    </ul>
+
+    <p><span class="highlight">2️⃣ 會員密碼儲存方式</span></p>
+    <ul>
+        <li>不儲存明文密碼</li>
+        <li>使用 SCRAM-SHA-256 機制</li>
+        <li>包含 salt + challenge-response 驗證</li>
+        <li>避免 rainbow table 攻擊</li>
+    </ul>
+
+    <p><span class="highlight">3️⃣ 應用層密碼保護（實務建議）</span></p>
+    <ul>
+        <li>後端通常使用 bcrypt 或 Argon2 進行密碼雜湊</li>
+        <li>即使資料庫被入侵，攻擊者也難以還原密碼</li>
+        <li>不可使用單純 SHA-256 直接儲存密碼</li>
+    </ul>
+
+    <p><span class="highlight">4️⃣ 資料本身是否加密？</span></p>
+    <ul>
+        <li>預設資料表內容不自動加密</li>
+        <li>可使用 pgcrypto extension 進行欄位加密</li>
+        <li>或使用磁碟層加密（如 LUKS）</li>
+    </ul>
+
+    <p><span class="highlight">口試重點：</span></p>
+    <p>
+        PostgreSQL 提供傳輸加密與安全驗證機制，
+        但會員密碼保護主要應由應用層負責，
+        採用強雜湊演算法與適當的存取控制策略。
+    </p>
+</div>
+</body>
+</html>
