@@ -209,5 +209,74 @@
         採用強雜湊演算法與適當的存取控制策略。
     </p>
 </div>
+<div class="section">
+    <h2>八、AES 與 RSA 簡明筆記</h2>
+
+    <h3>1️⃣ AES (Advanced Encryption Standard)</h3>
+    <ul>
+        <li>類型：<span class="highlight">對稱式區塊加密</span></li>
+        <li>加密/解密金鑰相同</li>
+        <li>區塊大小：128 bits，金鑰長度：128/192/256 bits</li>
+        <li>速度快，適合大量資料加密</li>
+        <li>用途：HTTPS、磁碟加密、VPN、檔案加密</li>
+        <li>核心概念：Substitution + Permutation + 混淆與擴散</li>
+    </ul>
+
+    <h3>2️⃣ RSA (Rivest-Shamir-Adleman)</h3>
+    <ul>
+        <li>類型：<span class="highlight">非對稱式加密</span>（公鑰/私鑰）</li>
+        <li>加密用公鑰，解密用私鑰</li>
+        <li>安全基礎：大整數質因數分解困難</li>
+        <li>速度較慢，適合金鑰交換與數位簽章</li>
+        <li>不適合加密大量資料</li>
+    </ul>
+
+    <h3>3️⃣ AES vs RSA 比較</h3>
+    <table class="compare-table">
+        <tr>
+            <th>項目</th>
+            <th>AES</th>
+            <th>RSA</th>
+        </tr>
+        <tr>
+            <td>類型</td>
+            <td>對稱式</td>
+            <td>非對稱式</td>
+        </tr>
+        <tr>
+            <td>金鑰</td>
+            <td>同一把</td>
+            <td>公鑰 / 私鑰</td>
+        </tr>
+        <tr>
+            <td>速度</td>
+            <td>快</td>
+            <td>慢</td>
+        </tr>
+        <tr>
+            <td>用途</td>
+            <td>資料加密</td>
+            <td>金鑰交換、簽章</td>
+        </tr>
+        <tr>
+            <td>安全基礎</td>
+            <td>結構設計與輪函數</td>
+            <td>質因數分解困難</td>
+        </tr>
+    </table>
+
+    <h3>4️⃣ 實務應用</h3>
+    <p>
+        在 HTTPS 或混合式加密 (Hybrid Encryption) 中：
+        RSA 用於交換 AES session key，
+        AES 用於加密後續大量資料。
+    </p>
+
+    <h3>5️⃣ 口試簡答模板</h3>
+    <p>
+        AES 是對稱式區塊加密，用同一把金鑰加密/解密，速度快，適合大量資料；
+        RSA 是非對稱式加密，使用公私鑰，安全性建立在質因數分解困難，通常用於金鑰交換與數位簽章；兩者實務上常結合使用。
+    </p>
+</div>
 </body>
 </html>
