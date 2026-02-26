@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docker、前端與後端部署完整說明文件</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f4f6f8;
+      margin: 40px;
+      line-height: 1.8;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    h1{
+      text-align: center;
+    }
+    .section {
+      background: #ffffff;
+      padding: 25px;
+      margin-bottom: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #eef2f7;
+    }
+    code {
+      background: #eef1f4;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+    .flow {
+      background: #eef2f7;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 10px;
+      font-family: monospace;
+      white-space: pre-line;
+    }
+    a{
+      color: #2980b9;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    a:visited {
+      color: #2980b9;
+    }
+    #social-share a {
+      text-decoration: none;
+      font-weight: bold;
+    }
+    #social-share a:hover {
+      text-decoration: underline;
+    }
+    #social-share span {
+      margin: 0 5px;
+    }
+    #social-share a#fb-share {
+      color: #4267B2;
+    }
+    #social-share a#line-share {
+      color: #00C300;
+    }
+    #social-share a#twitter-share {
+      color: #1DA1F2;
+    }
+    @media (max-width: 768px) {
+      img{
+        max-width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="google-translate-box">
+  <div id="google_translate_element"></div>
+  <!-- Google Translate 的自動翻譯功能 -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'zh-TW',  // 頁面原語言
+        includedLanguages: 'en,es,fr,de,it,zh-CN,ja,ko,th,vi,my,id,ms,ar,he,ru,tg,uk,hi,tr,pt,nl,is,fi,sv,no,ro,kk,bo,mn,la,fil,tl,el',  // 支援的翻譯語言（可擴展）
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <p>點擊上方的語言選單以切換語言</p>
+</div>
+<h1>Docker、前端與後端部署完整說明文件</h1>
+<div class="section">
+<h2>目錄</h2>
+  隨便點選下方一個主題便能直接跳到該主題的說明區
+<ul>
+    <li><a href="#section0">本專案的其他內容</a></li>
+    <li><a href="#section1">一、前端（Frontend）是什麼？</a></li>
+    <li><a href="#section2">二、後端（Backend）是什麼？</a></li>
+    <li><a href="#section3">三、Docker（容器）是什麼？</a></li>
+    <li><a href="#section4">四、是否一定需要 Docker？（詳細說明）</a></li>
+    <li><a href="#section5">五、前端 vs 後端 vs Docker 比較</a></li>
+    <li><a href="#section6">六、完整全端部署流程</a></li>
+    <li><a href="#section7">七、核心結論</a></li>
+</ul>
+</div>
+<div class="section" id="section0">
+  <h2>本專案的其他內容</h2>
+  <ol>
+    <li><a href="index.html" target="_blank">Spring Boot 常用註解速查表</a></li>
+    <li><a href="point_of_jparepository.html" target="_blank">Spring Boot 中的 JpaRepository 簡介</a></li>
+    <li><a href="link_sharing.html" target="_blank">社群平台連結追蹤與隱私完整解析</a></li>
+    <li><a href="html_vs_vue.html" target="_blank">HTML 與 Vue 的結構差異說明（含四種架構示意圖）</a></li>
+    <li><a href="vue_vs_multiple_html.html" target="_blank">Vue 與多頁 HTML 架構的差異與對應</a></li>
+    <li><a href="how_to_connect_spring_boot_to_vue3.html" target="_blank">Spring Boot 後端串接 Vue3 前端完整教學（含 Supabase PostgreSQL）</a></li>
+    <li><a href="deployment_and_anchor_navigation.html" target="_blank">Vue3 與純 HTML 在部署與錨點導航上的差異</a></li>
+    <li><a href="Vue_DevTools.html" target="_blank">Vue DevTools 深度解析與開發痛點解決</a></li>
+    <li><a href="entity_and_dto.html" target="_blank">Spring Boot 教學：Entity、DTO、RequestDTO、ResponseDTO 與資料流</a></li>
+    <li><a href="HTTP_ERROR.html" target="_blank">本地全端開發 HTTP 錯誤說明</a></li>
+    <li><a href="About_Test.html" target="_blank">軟體品質與測試規範說明</a></li>
+    <li><a href="Full_Stack_Architecture_Guide.html" target="_blank">全端部署架構與技術演進全紀錄 - 外語書商城</a></li>
+    <li><a href="Two_Steps_Of_Learning_How_To_Code.html" target="_blank">學程式的二個階段與輸入工具的角色</a></li>
+    <li><a href="misunderstanding_of_learning_how_to_code.html" target="_blank">學程式的階段、誤導與正確使用 AI 的方式</a></li>
+    <li><a href="RFC_3986_URL.html" target="_blank">RFC 3986 URL 編碼規範完整說明</a></li>
+    <li><a href="html-whitespace-collapsing-explanation.html" target="_blank">HTML 空白折疊與自動換行說明文件</a></li>
+    <li><a href="windows-screen-recording-issue.html" target="_blank">Windows 內建螢幕錄影與下拉選單說明</a></li>
+    <li><a href="crypto_notes.html" target="_blank">密碼學口試重點筆記</a></li>
+  </ol>
+</div>
+
+<div class="section" id="section1">
+  <h2>一、前端（Frontend）是什麼？</h2>
+  <p>前端是使用者在瀏覽器中看到與操作的部分，例如畫面、按鈕、動畫與表單。</p>
+  <p><strong>常見前端部署平台：</strong></p>
+  <ul>
+    <li>GitHub Pages（適合純靜態網站）</li>
+    <li>Vercel（支援 Vue / React / Next.js）</li>
+    <li>Netlify</li>
+    <li>Cloudflare Pages</li>
+  </ul>
+  <p>前端平台主要負責：</p>
+  <ul>
+    <li>提供公開網址</li>
+    <li>部署 HTML / CSS / JS</li>
+    <li>CDN 加速</li>
+  </ul>
+</div>
+
+<div class="section" id="section2">
+  <h2>二、後端（Backend）是什麼？</h2>
+  <p>後端負責資料處理與商業邏輯，例如：</p>
+  <ul>
+    <li>使用者登入驗證</li>
+    <li>資料庫存取</li>
+    <li>API 提供資料給前端</li>
+    <li>訂單與付款處理</li>
+  </ul>
+  <p><strong>常見後端託管平台：</strong></p>
+  <ul>
+    <li>Render</li>
+    <li>Railway</li>
+    <li>Fly.io</li>
+    <li>AWS / GCP / Azure</li>
+  </ul>
+  <p>後端平台提供：</p>
+  <ul>
+    <li>伺服器運算資源</li>
+    <li>資料庫服務</li>
+    <li>API 運行環境</li>
+    <li>HTTPS 與網路連線</li>
+  </ul>
+</div>
+
+<div class="section" id="section3">
+  <h2>三、Docker（容器）是什麼？</h2>
+  <p>
+    Docker 是一種容器技術，用來將應用程式與其依賴環境打包在一起，
+    確保在本地、測試機與雲端環境中能一致運作。
+  </p>
+  <ul>
+    <li>解決環境不一致問題</li>
+    <li>封裝程式與依賴套件</li>
+    <li>提高部署穩定性</li>
+  </ul>
+  <p><strong>重點：</strong>Docker 不是託管平台，它不提供網址與伺服器。</p>
+</div>
+<div class="section" id="section4">
+  <h2>四、是否一定需要 Docker？（詳細說明）</h2>
+  <h3>✅ 不一定需要 Docker 的情況</h3>
+  <ul>
+    <li>使用 Render / Railway 直接連接 GitHub 自動部署</li>
+    <li>專案規模小、依賴簡單</li>
+    <li>僅做學習或展示用途</li>
+  </ul>
+  <h3>✅ 建議使用 Docker 的情況</h3>
+  <ul>
+    <li>專案依賴複雜（多個服務或特殊環境）</li>
+    <li>需要確保開發、測試、正式環境完全一致</li>
+    <li>未來可能更換雲端平台</li>
+    <li>團隊協作開發</li>
+  </ul>
+  <div class="highlight">
+    核心觀念：
+    <br>
+    託管平台是「必須」（若要公開後端功能）。
+    <br>
+    Docker 是「強烈建議但非強制」。
+  </div>
+</div>
+<div class="section" id="section5">
+  <h2>五、前端 vs 後端 vs Docker 比較</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>項目</th>
+      <th>前端平台</th>
+      <th>後端平台</th>
+      <th>Docker</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>主要功能</td>
+      <td>顯示畫面</td>
+      <td>資料與邏輯處理</td>
+      <td>打包與環境一致化</td>
+    </tr>
+    <tr>
+      <td>是否提供網址</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td>是否提供伺服器</td>
+      <td>部分情況</td>
+      <td>✅</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td>是否必要</td>
+      <td>必須（若要公開網站）</td>
+      <td>必須（若需要後端功能）</td>
+      <td>視需求而定</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="section6">
+  <h2>六、完整全端部署流程</h2>
+  <div class="flow">
+    本地開發
+    ↓
+    (可選) 使用 Docker 打包
+    ↓
+    上傳 GitHub
+    ↓
+    前端部署（GitHub Pages / Vercel）
+    ↓ API 請求
+    後端部署（Render 等）
+    ↓
+    資料庫
+  </div>
+
+  <h3>部署邏輯總結：</h3>
+  <ul>
+    <li>靜態網站 → 只需要前端平台</li>
+    <li>需要登入、資料庫 → 必須加後端平台</li>
+    <li>Docker 提升部署穩定性，但不是強制</li>
+  </ul>
+</div>
+
+<div class="section" id="section7">
+  <h2>七、核心結論</h2>
+  <ul>
+    <li>前端負責畫面</li>
+    <li>後端負責邏輯與資料</li>
+    <li>託管平台讓網站能被全世界存取</li>
+    <li>Docker 讓部署更穩定與可移植</li>
+  </ul>
+</div>
+<ul id="messages"></ul>
+<div id="social-share" style="margin-top: 20px;">
+  <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
+  <span> | </span>
+  <a id="line-share" href="#" target="_blank" style="color: #00C300; font-weight: bold;">分享到 Line</a>
+  <span> | </span>
+  <a id="twitter-share" href="#" target="_blank" style="color: #1DA1F2; font-weight: bold;">分享到 X</a>
+</div>
+<script>
+  // 自動抓取當前頁面的 URL
+  var currentUrl = window.location.href;
+  // Facebook 分享
+  document.getElementById("fb-share").href =
+          "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(currentUrl);
+  // Line 分享
+  document.getElementById("line-share").href =
+          "https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(currentUrl);
+  // X (Twitter) 分享
+  document.getElementById("twitter-share").href =
+          "https://twitter.com/intent/tweet?url=" + encodeURIComponent(currentUrl) + "&text=你的文章標題";
+</script>
+<footer style="text-align: center; background-color: purple; color:yellow; font-size: 50px">
+  作者：<a href="https://www.facebook.com/profile.php?id=100056441813114&locale=zh_TW" target="_blank" style="color:white;">周彥廷</a>
+  <br>創作日期：西元二零二六年二月二十六日<br>
+  <img width="540" height="720" src="my_appearance2.jpg" alt="自拍">
+  <br>
+</footer>
+</body>
+</html>
