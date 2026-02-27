@@ -222,7 +222,7 @@ Memory or Local File
 </pre>
 
 <div class="warning">
-  H2 Embedded 屬於應用程式內部資料庫，
+  H2 Embedded 屬於應用程式內部資料庫，<br>
   其生命週期與 JVM 綁定，不具備獨立資料服務能力。
 </div>
 
@@ -310,12 +310,12 @@ H2 In-Memory
 </pre>
 
 <p>
-  在單實例部署下，所有請求皆導向同一 JVM。
+  在單實例部署下，所有請求皆導向同一 JVM。<br>
   因此 H2 記憶體資料可被不同裝置共享。
 </p>
 
 <div class="warning">
-  此行為僅為「單節點共享」，
+  此行為僅為「單節點共享」，<br>
   並非真正的 Shared Persistent Layer。
 </div>
 
@@ -337,7 +337,7 @@ Client ──▶ Instance B ──▶ H2 Memory B
 </ul>
 
 <div class="warning">
-  H2 In-Memory 屬於 Process-Level Persistence，
+  H2 In-Memory 屬於 Process-Level Persistence，<br>
   不具備跨節點一致性能力。
 </div>
 
