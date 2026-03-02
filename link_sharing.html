@@ -242,6 +242,131 @@ t=   ← 保留是時間軸
 
     <p>我有的不是「工程師技巧」而是「網路敏感度」，這是很重要的能力。</p>
 </div>
+<div class="section">
+    <h2>🧠 9. 進階問題：為什麼沒有 ? 也會顯示分享者資訊？</h2>
+
+    <p><strong>我的新問題：</strong></p>
+    <p>
+        「朋友分享一段 Facebook 影片到群組，網址裡有 <code>share</code> 字樣，
+        但沒有 <code>?</code> 及後續參數。
+        可是點進去卻會顯示是透過他的帳號分享的，為什麼？」
+    </p>
+
+    <p><strong>核心答案：</strong></p>
+    <ul>
+        <li>追蹤資訊不一定放在 <code>?</code> 後面。</li>
+        <li>有可能直接寫在網址「路徑（Path）」裡。</li>
+        <li>也可能透過 Cookie + 登入狀態動態顯示。</li>
+    </ul>
+</div>
+
+
+<div class="section">
+    <h2>📐 10. Facebook 連結結構完整解析</h2>
+
+    <h3>一個網址其實包含三種可能的資料來源：</h3>
+
+    <pre>
+https://facebook.com/username/videos/123456789?fbclid=xxxx
+│
+├── Path（路徑） → username / videos / 123456789
+│
+├── Query（?後面） → fbclid=xxxx
+│
+└── Cookie（看不到） → 登入狀態 / 使用者識別
+    </pre>
+
+    <h3>三種資料儲存位置說明：</h3>
+
+    <ul>
+        <li><strong>Path</strong>：可能包含分享者 ID 或貼文 ID。</li>
+        <li><strong>Query string</strong>：通常是廣告或來源追蹤。</li>
+        <li><strong>Cookie</strong>：完全不顯示在網址，但會告訴伺服器你是誰。</li>
+    </ul>
+
+    <p>
+        即使沒有 <code>?</code>，只要 Path 裡含有使用者識別碼，
+        伺服器仍然可以判斷分享來源。
+    </p>
+</div>
+
+
+<div class="section">
+    <h2>📡 11. 分享行為的資料流示意</h2>
+
+    <pre>
+[朋友點擊「分享」]
+        ↓
+Facebook 產生一筆新貼文（屬於他的帳號）
+        ↓
+系統產生新的貼文 ID
+        ↓
+網址指向：
+facebook.com/他的帳號/videos/貼文ID
+        ↓
+你點擊該網址
+        ↓
+伺服器讀取貼文ID → 查資料庫 → 顯示「某某分享了這段影片」
+    </pre>
+
+    <p>
+        重點：那個連結可能不是「原始影片連結」，而是「他分享後產生的新貼文」。
+    </p>
+</div>
+
+
+<div class="section">
+    <h2>🍪 12. Cookie / Session / URL 三者關係圖</h2>
+
+    <h3>情境一：你是登入狀態</h3>
+
+    <pre>
+你的瀏覽器
+  ├── URL
+  ├── Cookie（包含你的登入資訊）
+  └── Session ID
+        ↓
+Facebook 伺服器知道：
+  - 你是誰
+  - 你和分享者是否好友
+  - 你是否在同一群組
+        ↓
+動態顯示分享者資訊
+    </pre>
+
+    <h3>情境二：無痕模式 / 未登入</h3>
+
+    <pre>
+沒有 Cookie
+        ↓
+伺服器只能根據網址 Path 判斷
+        ↓
+如果 Path 沒有分享者 ID
+→ 就不會顯示分享者資訊
+    </pre>
+
+    <p>
+        這就是為什麼「用無痕模式測試」可以判斷
+        分享資訊是來自 URL 還是來自登入狀態。
+    </p>
+</div>
+
+
+<div class="section">
+    <h2>🏁 13. 進階總結</h2>
+
+    <ul>
+        <li>沒有 <code>?</code> 不代表沒有追蹤。</li>
+        <li>現代網站常把識別資訊寫在 Path。</li>
+        <li>登入狀態會改變頁面顯示內容。</li>
+        <li>社群平台通常是「動態渲染頁面」，不是單純靜態網址。</li>
+    </ul>
+
+    <p>
+        因此：<br>
+        <strong>網址是否包含 <code>?</code> 並不是判斷是否暴露分享者的唯一依據。</strong>
+    </p>
+</div>
 <ul id="messages"></ul>
 <div id="social-share" style="margin-top: 20px;">
     <a id="fb-share" href="#" target="_blank" style="color: #4267B2; font-weight: bold;">分享到 Facebook</a>
