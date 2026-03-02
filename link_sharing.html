@@ -112,9 +112,37 @@
     </ol>
 </nav>
 <h1>社群平台連結追蹤與隱私完整解析</h1>
-<p>這份文件整理了我和ChatGPT的整段討論，從我原本的問題開始到完整解釋「為什麼分享連結後會出現 <code>/?後面一大串字串</code>，是否會暴露分享者資訊」。</p>
-
 <div class="section">
+    <h2>目錄</h2>
+    隨便點選下方一個主題便能直接跳到該主題的說明區
+    <ul>
+        <li><a href="#section0">前言</a></li>
+        <li><a href="#section1">1. 原始問題：分享網址會不會暴露分享者？</a></li>
+        <li><a href="#section2">2. Query Parameters 是什麼？</a></li>
+        <li><a href="#section3">3. 為什麼 Facebook 會加一長串參數？</a></li>
+        <li><a href="#section4">4. 為什麼 GitHub Pages 不會有一串參數？</a></li>
+        <li><a href="#section5">5. 各平台常見追蹤參數列表</a></li>
+        <li><a href="#section6">6. 哪些參數可能會暴露我的身份？</a></li>
+        <li><a href="#section7">7. 如何「匿名」分享連結</a></li>
+        <li><a href="#section8">8. 總結</a></li>
+        <li><a href="#section9">9. 進階問題：為什麼沒有 ? 也會顯示分享者資訊？</a></li>
+        <li><a href="#section10">10. Facebook 連結結構完整解析</a></li>
+        <li><a href="#section11">11. 分享行為的資料流示意</a></li>
+        <li><a href="#section12">12. Cookie / Session / URL 三者關係圖</a></li>
+        <li><a href="#section13">13. 進階總結</a></li>
+        <li><a href="#section14">14. 那個 share 連結能不能避免暴露分享者？</a></li>
+        <li><a href="#section15">15. 3 秒匿名判斷法</a></li>
+        <li><a href="#section16">16. 進階工程檢查法（DevTools / Network / GraphQL）</a></li>
+        <li><a href="#section17">17. GraphQL / URL / Cookie / Session 三者關係圖</a></li>
+    </ul>
+</div>
+<div class="section" id="section0">
+    <h2>前言</h2>
+    <p>在社群平台分享連結時，常常會看到網址後面多了一串參數，例如：</p>
+    <pre>https://外部網站.com/?fbclid=AJ82jsdOAsd...</pre>
+    <p>這些參數是平台用來追蹤分享來源和使用者行為的工具，但也引發了許多關於隱私的疑問。本文將深入解析這些參數的作用、是否會暴露分享者身份，以及如何保護自己的隱私。</p>
+</div>
+<div class="section" id="section1">
     <h2>🔍 1. 原始問題：分享網址會不會暴露分享者？</h2>
     <p><strong>我的問題：</strong></p>
     <p>「透過網址分享連結給他人時，為了避免發現原始貼文的分享者是誰，可以刪除 <code>/?</code> 之後的文字嗎？懂這個跟是不是工程師有關嗎？」</p>
@@ -124,7 +152,7 @@
         ✔ 但這是一般「網路隱私常識」，不代表知道的人一定是工程師。</p>
 </div>
 
-<div class="section">
+<div class="section" id="section2">
     <h2>🧩 2. Query Parameters 是什麼？</h2>
     <p><code>?</code> 後面的是查詢參數，用來傳遞額外資訊，例如：</p>
 
@@ -139,7 +167,7 @@
     </ul>
 </div>
 
-<div class="section">
+<div class="section" id="section3">
     <h2>📌 3. 為什麼 Facebook 會加一長串參數？</h2>
     <p>因為我處在「已登入」狀態，平台需要：</p>
 
@@ -154,7 +182,7 @@
     <pre>https://外部網站.com/?fbclid=AJ82jsdOAsd...</pre>
 </div>
 
-<div class="section">
+<div class="section" id="section4">
     <h2>📌 4. 為什麼 GitHub Pages 不會有一串參數？</h2>
     <p>我的 GitHub 靜態網站是：</p>
     <ul>
@@ -168,7 +196,7 @@
     <pre>https://我的網站.github.io/page.html</pre>
 </div>
 
-<div class="section">
+<div class="section" id="section5">
     <h2>📊 5. 各平台常見追蹤參數列表</h2>
 
     <h3>Facebook</h3>
@@ -204,7 +232,7 @@ t=   ← 保留是時間軸
     <p>以上參數全部都可以刪除，不會影響目標網站使用。</p>
 </div>
 
-<div class="section">
+<div class="section" id="section6">
     <h2>⚠ 6. 哪些參數可能會暴露我的身份？（注意）</h2>
     <ul>
         <li><strong>推薦碼、會員碼</strong>（如 <code>ref=ABC123</code>）</li>
@@ -214,7 +242,7 @@ t=   ← 保留是時間軸
     <p>當你遇到上述參數時請記得刪掉它們。</p>
 </div>
 
-<div class="section">
+<div class="section" id="section7">
     <h2>🛡 7. 如何「匿名」分享連結</h2>
 
     <h3>方法 1：刪掉 <code>?</code> 後方所有參數</h3>
@@ -230,7 +258,7 @@ t=   ← 保留是時間軸
 
 </div>
 
-<div class="section">
+<div class="section" id="section8">
     <h2>🏁 8. 總結</h2>
     <p>我的理解完全正確：</p>
     <ul>
@@ -242,7 +270,7 @@ t=   ← 保留是時間軸
 
     <p>我有的不是「工程師技巧」而是「網路敏感度」，這是很重要的能力。</p>
 </div>
-<div class="section">
+<div class="section" id="section9">
     <h2>🧠 9. 進階問題：為什麼沒有 ? 也會顯示分享者資訊？</h2>
 
     <p><strong>我的新問題：</strong></p>
@@ -261,7 +289,7 @@ t=   ← 保留是時間軸
 </div>
 
 
-<div class="section">
+<div class="section" id="section10">
     <h2>📐 10. Facebook 連結結構完整解析</h2>
 
     <h3>一個網址其實包含三種可能的資料來源：</h3>
@@ -291,7 +319,7 @@ https://facebook.com/username/videos/123456789?fbclid=xxxx
 </div>
 
 
-<div class="section">
+<div class="section" id="section11">
     <h2>📡 11. 分享行為的資料流示意</h2>
 
     <pre>
@@ -315,7 +343,7 @@ facebook.com/他的帳號/videos/貼文ID
 </div>
 
 
-<div class="section">
+<div class="section" id="section12">
     <h2>🍪 12. Cookie / Session / URL 三者關係圖</h2>
 
     <h3>情境一：你是登入狀態</h3>
@@ -352,7 +380,7 @@ Facebook 伺服器知道：
 </div>
 
 
-<div class="section">
+<div class="section" id="section13">
     <h2>🏁 13. 進階總結</h2>
 
     <ul>
@@ -366,6 +394,233 @@ Facebook 伺服器知道：
         因此：<br>
         <strong>網址是否包含 <code>?</code> 並不是判斷是否暴露分享者的唯一依據。</strong>
     </p>
+</div>
+<div class="section" id="section14">
+    <h2>🚫 14. 那個 share 連結能不能避免暴露分享者？</h2>
+
+    <p><strong>我的問題：</strong></p>
+    <p>
+        「所以那個 share 的部分就完全不能避免暴露分享者資訊嗎？」
+    </p>
+
+    <p><strong>回答重點：</strong></p>
+    <ul>
+        <li>如果那個連結本身就是「他分享後產生的新貼文」，幾乎無法匿名。</li>
+        <li>因為那不是追蹤碼，而是一則屬於他帳號的貼文。</li>
+        <li>刪除 <code>share</code> 並不會改變貼文歸屬。</li>
+    </ul>
+
+    <h3>兩種可能情況：</h3>
+
+    <h4>① 那是分享後的新貼文</h4>
+    <pre>
+facebook.com/他的帳號/posts/123456789
+facebook.com/share/v/123456789
+    </pre>
+    <p>
+        這種網址指向的是「他的貼文」，不是原始影片。
+        因此一定會顯示分享者。
+    </p>
+
+    <h4>② 只是登入狀態造成的顯示</h4>
+    <p>
+        如果在無痕模式（未登入狀態）下打開該網址，
+        不再顯示分享者資訊，
+        那表示該顯示是由 Cookie 與登入狀態動態產生，
+        而不是網址本身暴露。
+    </p>
+
+    <h3>如何驗證？</h3>
+    <ol>
+        <li>複製該連結</li>
+        <li>開啟瀏覽器無痕視窗</li>
+        <li>不要登入 Facebook</li>
+        <li>貼上網址並觀察是否仍顯示分享者</li>
+    </ol>
+
+    <p>
+        如果仍顯示 → 那是貼文本體（無法匿名）<br>
+        如果不顯示 → 那是登入狀態造成（可避免）
+    </p>
+</div>
+<div class="section" id="section15">
+    <h2>⚡ 15. 3 秒匿名判斷法</h2>
+
+    <p>
+        當你看到一個社群連結時，可以用以下「3 秒檢查法」
+        快速判斷是否可能暴露分享者資訊。
+    </p>
+
+    <h3>✅ 第 1 秒：找 ?</h3>
+    <pre>
+https://example.com/video/123456?fbclid=xxxx&utm_source=facebook
+    </pre>
+    <p>
+        <code>?</code> 後面的通常是追蹤參數（Query String）。<br>
+        多數情況可以刪除，不影響內容本體。
+    </p>
+
+    <ul>
+        <li>fbclid=</li>
+        <li>utm_source=</li>
+        <li>utm_medium=</li>
+        <li>ref=</li>
+    </ul>
+
+    <p>
+        👉 有 <code>?</code> 多半只是追蹤碼。
+    </p>
+
+    <h3>✅ 第 2 秒：看路徑是否包含帳號或群組</h3>
+    <pre>
+facebook.com/某人名字/posts/123456
+facebook.com/groups/群組ID/permalink/123456
+facebook.com/profile.php?id=數字
+    </pre>
+
+    <p>
+        如果網址路徑中包含：
+    </p>
+
+    <ul>
+        <li>使用者名稱</li>
+        <li>profile.php?id=</li>
+        <li>groups/群組ID</li>
+    </ul>
+
+    <p>
+        🚨 代表這是某個帳號或群組底下的貼文。<br>
+        這不是追蹤碼，而是內容本體的歸屬。
+    </p>
+
+    <h3>✅ 第 3 秒：無痕模式驗證</h3>
+
+    <ol>
+        <li>複製該網址</li>
+        <li>開啟瀏覽器無痕視窗</li>
+        <li>不要登入社群平台</li>
+        <li>貼上網址查看是否仍顯示分享者</li>
+    </ol>
+
+    <p>
+        結果判讀：
+    </p>
+
+    <ul>
+        <li>仍顯示分享者 → 那是貼文本體，無法匿名。</li>
+        <li>不再顯示 → 那是登入狀態與 Cookie 造成的顯示。</li>
+    </ul>
+
+    <h3>🎯 一句話速記</h3>
+    <p>
+        有 <code>?</code> 多半是追蹤。<br>
+        有人名或群組在路徑 → 是貼文歸屬。<br>
+        無痕模式是最終驗證方法。
+    </p>
+</div>
+<div class="section" id="section16">
+    <h2>🔬 16. 進階工程檢查法（DevTools / Network / GraphQL）</h2>
+
+    <p>
+        如果想確認一個連結到底是在讀「某個使用者的貼文」，還是單純影片 ID，可以用瀏覽器開發者工具來檢查。
+    </p>
+
+    <h3>🪜 步驟一：開啟開發者工具</h3>
+    <ul>
+        <li>Windows：按 <code>F12</code></li>
+        <li>Mac：<code>Command + Option + I</code></li>
+        <li>或右鍵 → 檢查</li>
+    </ul>
+    <p>切換到 <strong>Network（網路）</strong> 分頁，重新整理頁面。</p>
+
+    <h3>🪜 步驟二：觀察 request</h3>
+    <ul>
+        <li>注意 request URL 中的 <code>graphql</code> / <code>video</code> / <code>story</code> / <code>profile</code> / <code>feed</code></li>
+        <li>點開 request，檢查回傳的 Response</li>
+        <li>搜尋 <code>owner</code> / <code>author</code> / <code>profile</code> / <code>actor</code></li>
+    </ul>
+
+    <pre>
+"owner": {
+  "id": "1000xxxxxxx",
+  "name": "某某"
+}
+    </pre>
+
+    <p>
+        如果看到類似 <code>owner</code> 或 <code>profile</code> 的資訊 → 表示該連結指向某個帳號的貼文。
+    </p>
+
+    <h3>🧠 判讀邏輯</h3>
+    <ul>
+        <li>只有 <code>video_id</code> → 原始影片，無帳號歸屬</li>
+        <li>出現 <code>story_id</code> + <code>owner_id</code> → 分享貼文，屬於某帳號</li>
+    </ul>
+
+    <h3>⚠ 注意事項</h3>
+    <ul>
+        <li>登入狀態會顯示更多個人化資料</li>
+        <li>無痕模式 / 未登入最能看出 URL 本身資訊與登入狀態的差異</li>
+    </ul>
+
+    <p>
+        這種方法讓你直接從網路請求看清楚，分享者資訊到底是不是內嵌在內容本體裡，而不是靠網址參數控制。
+    </p>
+
+    <h3>🎯 快速工程師判斷法</h3>
+    <ul>
+        <li>Network 裡有 <code>owner</code> → 帳號貼文，無法匿名</li>
+        <li>只有 <code>video</code> → 單純影片，可匿名</li>
+        <li>刪掉 query string 對貼文歸屬沒影響</li>
+    </ul>
+</div>
+<div class="section" id="section17">
+    <h2>📡 17. GraphQL / URL / Cookie / Session 三者關係圖</h2>
+
+    <p>
+        現代社群平台（以 Facebook 為例）並不是單純靠網址顯示內容，而是結合：
+    </p>
+    <ul>
+        <li><strong>URL 路徑</strong>：貼文 ID / 使用者 ID / 群組 ID</li>
+        <li><strong>Query string</strong>：追蹤來源 / 廣告參數（可刪）</li>
+        <li><strong>Cookie / Session</strong>：登入狀態、個人化資訊</li>
+        <li><strong>GraphQL API</strong>：動態拉取資料並渲染頁面</li>
+    </ul>
+
+    <h3>🔗 資料流示意</h3>
+
+    <pre>
+[使用者點擊分享連結]
+        │
+        ▼
+URL（Path + Query）送到伺服器
+        │
+        ▼
+伺服器檢查 Cookie / Session
+        │
+        ├── 有登入 → 回傳個人化資料（如：好友、群組權限）
+        └── 無登入 → 只回傳公開內容
+        │
+        ▼
+GraphQL / API 回傳 JSON
+        │
+        ▼
+前端動態渲染頁面
+        │
+        ├── 顯示「某某分享」 → URL 指向貼文本體 + API 回傳 owner
+        └── 只顯示影片 → URL 只是影片 ID，無 owner
+    </pre>
+
+    <p>
+        <strong>重點：</strong>即使刪掉 <code>?utm...</code> 參數，分享者資訊仍可能透過 URL 路徑 + API + Cookie 顯示。
+    </p>
+
+    <h3>🎯 小結</h3>
+    <ul>
+        <li>追蹤參數可刪，但貼文本體屬於帳號 → 無法完全匿名</li>
+        <li>登入狀態影響顯示內容，無痕模式可驗證</li>
+        <li>GraphQL API 是現代平台用來動態拉資料並渲染頁面的核心機制</li>
+    </ul>
 </div>
 <ul id="messages"></ul>
 <div id="social-share" style="margin-top: 20px;">
